@@ -46,7 +46,7 @@ export const deleteFilm = (req, res) => {
   const { id } = req.params;
   Film.deleteOne({ _id: id })
     .then(() => {
-      res.send(`Film with the id: ${id} deleted from the database`);
+      res.send(`Film with id: ${id} deleted from database`);
     })
     .catch((err) => {
       res.json({ message: err });
@@ -65,7 +65,7 @@ export const updateFilm = (req, res) => {
   if (title)
     Film.updateOne({ _id: id }, { $set: { title: title } })
       .then(() => {
-        res.send(`Film with the id ${id} updated`);
+        res.send(`Film with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -73,7 +73,7 @@ export const updateFilm = (req, res) => {
   if (year)
     Film.updateOne({ _id: id }, { $set: { year: year } })
       .then(() => {
-        res.send(`Film with the id ${id} updated`);
+        res.send(`Film with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -81,7 +81,7 @@ export const updateFilm = (req, res) => {
   if (genre)
     Film.updateOne({ _id: id }, { $set: { genre: genre } })
       .then(() => {
-        res.send(`Film with the id ${id} updated`);
+        res.send(`Film with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });

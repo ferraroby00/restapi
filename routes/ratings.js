@@ -1,6 +1,6 @@
 import express from 'express';
-import {getAll, insertRating, getRating, deleteRating, updateRating} from '../controllers/ratings.js';
 const router = express.Router();
+import { getAll, insertRating, getRating, deleteRating, updateRating } from '../controllers/ratings.js';
 
 //GET ALL RATINGS
 router.get('/', getAll);
@@ -16,6 +16,5 @@ router.delete('/:id', deleteRating);
 
 //UPDATE USER BY ID
 router.patch('/:id', updateRating);
-
 
 export default router;

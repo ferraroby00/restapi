@@ -95,7 +95,7 @@ export const deleteRating = (req, res) => {
   const { id } = req.params;
   Rating.deleteOne({ _id: id })
     .then(() => {
-      res.send(`Rating with the id: ${id} deleted from the database`);
+      res.send(`Rating with id: ${id} deleted from database`);
     })
     .catch((err) => {
       res.json({ message: err });
@@ -110,7 +110,7 @@ export const updateRating = (req, res) => {
   if (rating)
     Rating.updateOne({ _id: id }, { $set: { rating: rating } })
       .then(() => {
-        res.send(`Rating with the id ${id} updated`);
+        res.send(`Rating with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });

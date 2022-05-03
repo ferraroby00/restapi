@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import filmRoutes from './routes/films.js';
 import userRoutes from './routes/users.js';
 import ratingRoutes from './routes/ratings.js';
+
 const app = express();
 const PORT = 5000;
 
@@ -14,14 +15,17 @@ app.use('/films',filmRoutes);
 app.use('/users',userRoutes);
 
 app.use('/ratings',ratingRoutes);
+
 //Homepage
-app.get('/',(req,res) => {
-    res.send('Hello from Homepage');
+app.get('/home',(req,res) => {
+    res.send('Welcome to the homepage');
 });
 
+//Connection to database
 mongoose.connect('mongodb://127.0.0.1:27017/ufr');
 const con = mongoose.connection;
-con.on('open', () => {console.log('Connected to DB');});
+con.on('open', () => {console.log('Connected to database');});
 con.on('error', () => {console.log('Error');});
-//Ascolto sulla porta PORT
-app.listen(PORT, () => console.log(`Server Running on port: http://localhost:${PORT}`));
+
+//Server listening on port PORT
+app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));

@@ -48,7 +48,7 @@ export const deleteUser = (req, res) => {
   const { id } = req.params;
   User.deleteOne({ _id: id })
     .then(() => {
-      res.send(`User with the id: ${id} deleted from the database`);
+      res.send(`User with id: ${id} deleted from database`);
     })
     .catch((err) => {
       res.json({ message: err });
@@ -67,7 +67,7 @@ export const updateUser = (req, res) => {
   if (name)
     User.updateOne({ _id: id }, { $set: { name: name } })
       .then(() => {
-        res.send(`User with the id ${id} updated`);
+        res.send(`User with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -75,7 +75,7 @@ export const updateUser = (req, res) => {
   if (last)
     User.updateOne({ _id: id }, { $set: { last: last } })
       .then(() => {
-        res.send(`User with the id ${id} updated`);
+        res.send(`User with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -83,7 +83,7 @@ export const updateUser = (req, res) => {
   if (age)
     User.updateOne({ _id: id }, { $set: { age: age } })
       .then(() => {
-        res.send(`User with the id ${id} updated`);
+        res.send(`User with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -91,7 +91,7 @@ export const updateUser = (req, res) => {
   if (email)
     User.updateOne({ _id: id }, { $set: { email: email } })
       .then(() => {
-        res.send(`User with the id ${id} updated`);
+        res.send(`User with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -99,7 +99,7 @@ export const updateUser = (req, res) => {
   if (gender)
     User.updateOne({ _id: id }, { $set: { gender: gender } })
       .then(() => {
-        res.send(`User with the id ${id} updated`);
+        res.send(`User with id: ${id} updated`);
       })
       .catch((err) => {
         res.json({ message: err });
