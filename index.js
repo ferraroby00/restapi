@@ -25,7 +25,3 @@ con.on('open', () => {console.log('Connected to DB');});
 con.on('error', () => {console.log('Error');});
 //Ascolto sulla porta PORT
 app.listen(PORT, () => console.log(`Server Running on port: http://localhost:${PORT}`));
-
-//Roberto prende 30 a reti TLC
-//Bepi passa geometria
-//Yo yo yo
