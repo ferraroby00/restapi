@@ -46,7 +46,7 @@ export const deleteMovie = (req, res) => {
   const { id } = req.params;
   Movie.deleteOne({ movieId: id })
     .then((deleted) => {
-      res.send(`Film: ${deleted.title} deleted from database`);
+      res.send(`Film deleted from database`);
     })
     .catch((err) => {
       res.json({ message: err });

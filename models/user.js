@@ -13,7 +13,7 @@ const UserSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  last: {
+  email: {
     type: String,
     required: true,
   },
@@ -21,10 +21,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  seen: {
-    type: Array,
-    default: [],
-  },
+  userId: {
+    type: String,
+    required: true,
+  }
 });
 
 export default mongoose.model("Users", UserSchema);

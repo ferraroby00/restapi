@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
+import Counter from "../models/counter.js";
 
 //GET HANDLER - Returns all users documents
 export const getUsers = (req, res) => {
@@ -20,6 +21,7 @@ export const createUser = (req, res) => {
     age: req.body.age,
     email: req.body.email,
     gender: req.body.gender,
+    userId: getSequenceNextValue("users").toString(),
   });
   user
     .save()
@@ -105,3 +107,11 @@ export const updateUser = (req, res) => {
         res.json({ message: err });
       });
 };
+
+function getSequenceNextValue(seqName) {
+  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } })
+    .then(Counter.find({ name: seqName }))
+    .then((found) => {
+      return found.seqValue;
+    });
+}
