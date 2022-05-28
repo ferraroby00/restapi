@@ -67,7 +67,7 @@ export const updateMovie = (req, res) => {
   if (title)
     Movie.updateOne({ movieId: id }, { $set: { title: title } })
       .then((updated) => {
-        res.send(`Film: ${updated.title} updated successfully`);
+        res.send(`Film updated successfully`);
       })
       .catch((err) => {
         res.json({ message: err });
@@ -75,7 +75,7 @@ export const updateMovie = (req, res) => {
   if (genres)
     Movie.updateOne({ movieId: id }, { $set: { genres: genres } })
       .then((updated) => {
-        res.send(`Film: ${updated.title} updated successfully`);
+        res.send(`Film updated successfully`);
       })
       .catch((err) => {
         res.json({ message: err });
