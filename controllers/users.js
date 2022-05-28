@@ -14,12 +14,13 @@ export const getUsers = (req, res) => {
 };
 
 function getSequenceNextValue(seqName) {
-  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then(
-    Counter.findOne({ name: seqName }).then((found) => {
+  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } })
+  .then();
+  Counter.findOne({ name: seqName })
+  .then((found) => {
       console.log(found);
       return found.seqNumber;
-    })
-  );
+    });
 }
 
 //POST HANDLER - Inserts a new user document
