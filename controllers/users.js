@@ -21,7 +21,7 @@ export const createUser = (req, res) => {
     age: req.body.age,
     email: req.body.email,
     gender: req.body.gender,
-    userId: getSequenceNextValue("users").toString(),
+    userId: "" + getSequenceNextValue("users"),
   });
   user
     .save()
