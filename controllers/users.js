@@ -24,6 +24,7 @@ function getSequenceNextValue(seqName) {
 
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
+  getSequenceNextValue("users");
   const user = new User({
     name: req.body.name,
     last: req.body.last,
