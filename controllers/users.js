@@ -15,7 +15,7 @@ export const getUsers = (req, res) => {
 
 function getSequenceNextValue(seqName) {
   Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then();
-  Counter.findOne({ name: seqName }, (found) => {
+  Counter.findOne({ name: seqName }, (error, found) => {
     console.log(found);
     return found.seqNumber;
   });
