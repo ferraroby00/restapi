@@ -30,7 +30,7 @@ export const createUser = (req, res) => {
     age: req.body.age,
     email: req.body.email,
     gender: req.body.gender,
-    userId: req.body.userId
+    userId: req.body.userId,
   });
   user
     .save()
@@ -40,6 +40,13 @@ export const createUser = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
+};
+
+export const getPreferences = (req, res) => {
+  const user = User.find({ email: req.body.email }).catch((err) => {
+    res.json({ message: err });
+  });
+  console.log(user);
 };
 
 //GET BY ID HANDLER - Returns a user by ID

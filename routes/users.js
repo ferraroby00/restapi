@@ -6,6 +6,7 @@ import {
   getUser,
   deleteUser,
   updateUser,
+  getPreferences
 } from "../controllers/users.js";
 
 //GET ALL USERS
@@ -13,6 +14,9 @@ router.get("/", getUsers);
 
 //CREATE A NEW USER
 router.post("/", createUser);
+
+//
+router.post("/preference", getPreferences);
 
 //GET USER BY ID
 router.get("/:id", getUser);
