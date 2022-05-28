@@ -60,7 +60,7 @@ export const deleteMovie = (req, res) => {
 };
 
 //PATCH BY ID HANDLER - Updates a movie by ID and by specific fields stored in HTTP request body
-export const updateFilm = (req, res) => {
+export const updateMovie = (req, res) => {
   const { id } = req.params;
   const { title, genres } = req.body;
 

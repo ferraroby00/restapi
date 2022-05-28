@@ -1,26 +1,26 @@
 import express from "express";
 const router = express.Router();
 import {
-  getFilms,
+  getMovies,
   insertMovie,
-  getFilm,
-  deleteFilm,
-  updateFilm,
+  getMovie,
+  deleteMovie,
+  updateMovie,
 } from "../controllers/movies.js";
 
 //GET ALL FILMS
-router.get("/", getFilms);
+router.get("/", getMovies);
 
 //INSERT A NEW MOVIE
 router.post("/", insertMovie);
 
 //GET FILM BY ID
-router.get("/:id", getFilm);
+router.get("/:id", getMovie);
 
 //DELETE FILM BY ID
-router.delete("/:id", deleteFilm);
+router.delete("/:id", deleteMovie);
 
 //UPDATE USER BY ID
-router.patch("/:id", updateFilm);
+router.patch("/:id", updateMovie);
 
 export default router;
