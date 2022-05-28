@@ -6,7 +6,7 @@ import {
   getFilm,
   deleteFilm,
   updateFilm,
-} from "../controllers/films.js";
+} from "../controllers/movies.js";
 
 //GET ALL FILMS
 router.get("/", getFilms);
