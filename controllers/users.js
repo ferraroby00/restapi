@@ -42,12 +42,13 @@ export const createUser = (req, res) => {
     });
 };
 
-export const getPreferences = (req, res) => {
-  const user = User.find({ email: req.body.email }, (error) => {
-    res.json({ message: error });
+/*export const getPreferences = (req, res) => {
+  const user = User.find({ email: req.body.email }, (error,found) => {
+    if(error) res.json({ message: error });
+
   });
   console.log(user);
-};
+};*/
 
 //GET BY ID HANDLER - Returns a user by ID
 export const getUser = (req, res) => {
