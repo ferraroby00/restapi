@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Counter from "../models/counter.js";
+const counter;
 
 //GET HANDLER - Returns all users documents
 export const getUsers = (req, res) => {
@@ -17,19 +18,19 @@ function getSequenceNextValue(seqName) {
   Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then();
   Counter.findOne({ name: seqName }, (error, found) => {
     console.log(found);
-    return found.seqNumber;
+    counter = found.seqNumber;
   });
 }
 
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
-  console.log(getSequenceNextValue("users"));
   const user = new User({
     name: req.body.name,
     last: req.body.last,
     age: req.body.age,
     email: req.body.email,
     gender: req.body.gender,
+    userId: counter
   });
   user
     .save()
