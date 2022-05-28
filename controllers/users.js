@@ -14,26 +14,22 @@ export const getUsers = (req, res) => {
 };
 
 function getSequenceNextValue(seqName) {
-  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } })
-  .then();
-  Counter.findOne({ name: seqName })
-  .then((found) => {
-      console.log(found);
-      return found.seqNumber;
-    });
+  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then();
+  Counter.findOne({ name: seqName }).then((found) => {
+    console.log(found.seqNumber);
+    return found.seqNumber;
+  });
 }
 
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
-  const demo = getSequenceNextValue("users");
-  console.log(demo);
+  console.log(getSequenceNextValue("users"));
   const user = new User({
     name: req.body.name,
     last: req.body.last,
     age: req.body.age,
     email: req.body.email,
-    gender: req.body.gender,
-    userId: ""+demo,
+    gender: req.body.gender
   });
   user
     .save()
@@ -119,5 +115,3 @@ export const updateUser = (req, res) => {
         res.json({ message: err });
       });
 };
-
-
