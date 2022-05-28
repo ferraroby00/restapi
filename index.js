@@ -16,6 +16,8 @@ app.use('/users',userRoutes);
 
 app.use('/ratings',ratingRoutes);
 
+app.set("view engine", "ejs");
+
 //Homepage
 app.get('/home',(req,res) => {
     res.send('Welcome to the homepage');
