@@ -1,9 +1,9 @@
-import Film from "../models/film.js";
+import Movie from "../models/movies.js";
 import Rating from "../models/rating.js";
 
 //GET HANDLER - Returns all movies documents
-export const getFilms = (req, res) => {
-  Film.find({})
+export const getMovies = (req, res) => {
+  Movie.find({})
     .then(function (films) {
       res.send(films);
     })
@@ -14,12 +14,12 @@ export const getFilms = (req, res) => {
 
 //POST HANDLER - Inserts a new movie document
 export const insertMovie = (req, res) => {
-  const film = new Film({
+  const movie = new Movie({
+    movieId: req.body.movieId,
     title: req.body.title,
-    year: req.body.year,
-    genre: req.body.genre,
+    genres: req.body.genres,
   });
-  film
+  movies
     .save()
     .then((data) => {
       res.json(data);
@@ -30,9 +30,9 @@ export const insertMovie = (req, res) => {
 };
 
 //GET BY ID HANDLER - Returns a movie by ID
-export const getFilm = (req, res) => {
+export const getMovie = (req, res) => {
   const { id } = req.params;
-  Film.findById(id)
+  Movie.find({ movieId: id })
     .then(function (found) {
       res.send(found);
     })
@@ -42,46 +42,40 @@ export const getFilm = (req, res) => {
 };
 
 //DELETE BY ID HANDLER - Deletes a movie by ID
-export const deleteFilm = (req, res) => {
+export const deleteMovie = (req, res) => {
   const { id } = req.params;
-  Film.deleteOne({ _id: id })
-    .then(() => {
-      res.send(`Film with id: ${id} deleted from database`);
+  Movie.deleteOne({ movieId: id })
+    .then((deleted) => {
+      res.send(`Film: ${deleted.title} deleted from database`);
     })
     .catch((err) => {
       res.json({ message: err });
     });
+
+  /*
   //Deletes ratings associated to the deleted film
   Rating.deleteMany({ filmId: id }).catch((err) => {
     res.json({ message: err });
-  });
+  });*/
 };
 
 //PATCH BY ID HANDLER - Updates a movie by ID and by specific fields stored in HTTP request body
 export const updateFilm = (req, res) => {
   const { id } = req.params;
-  const { title, year, genre } = req.body;
+  const { title, genres } = req.body;
 
   if (title)
-    Film.updateOne({ _id: id }, { $set: { title: title } })
-      .then(() => {
-        res.send(`Film with id: ${id} updated`);
+    Film.updateOne({ movieId: id }, { $set: { title: title } })
+      .then((updated) => {
+        res.send(`Film: ${updated.title} updated successfully`);
       })
       .catch((err) => {
         res.json({ message: err });
       });
-  if (year)
-    Film.updateOne({ _id: id }, { $set: { year: year } })
-      .then(() => {
-        res.send(`Film with id: ${id} updated`);
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });
-  if (genre)
-    Film.updateOne({ _id: id }, { $set: { genre: genre } })
-      .then(() => {
-        res.send(`Film with id: ${id} updated`);
+  if (genres)
+    Film.updateOne({ movieId: id }, { $set: { genres: genre } })
+      .then((updated) => {
+        res.send(`Film: ${updated.title} updated successfully`);
       })
       .catch((err) => {
         res.json({ message: err });

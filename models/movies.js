@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const MovieSchema = mongoose.Schema({
-  movieID: {
+  movieId: {
     type: String,
     required: true,
   },
