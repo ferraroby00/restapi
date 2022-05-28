@@ -65,7 +65,7 @@ export const updateMovie = (req, res) => {
   const { title, genres } = req.body;
 
   if (title)
-    Film.updateOne({ movieId: id }, { $set: { title: title } })
+    Movie.updateOne({ movieId: id }, { $set: { title: title } })
       .then((updated) => {
         res.send(`Film: ${updated.title} updated successfully`);
       })
@@ -73,7 +73,7 @@ export const updateMovie = (req, res) => {
         res.json({ message: err });
       });
   if (genres)
-    Film.updateOne({ movieId: id }, { $set: { genres: genre } })
+    Movie.updateOne({ movieId: id }, { $set: { genres: genre } })
       .then((updated) => {
         res.send(`Film: ${updated.title} updated successfully`);
       })
