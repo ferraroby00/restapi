@@ -15,7 +15,7 @@ export const getUsers = (req, res) => {
 
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
-  const id = getSequenceNextValue("users");
+  const id = this.getSequenceNextValue("users");
   console.log(id);
   const user = new User({
     name: req.body.name,
