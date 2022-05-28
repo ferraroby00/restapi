@@ -43,8 +43,8 @@ export const createUser = (req, res) => {
 };
 
 export const getPreferences = (req, res) => {
-  const user = User.find({ email: req.body.email }).catch((err) => {
-    res.json({ message: err });
+  const user = User.find({ email: req.body.email }, (error) => {
+    res.json({ message: error });
   });
   console.log(user);
 };
