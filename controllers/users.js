@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Counter from "../models/counter.js";
-const counter;
+const counter = 0;
 
 //GET HANDLER - Returns all users documents
 export const getUsers = (req, res) => {
