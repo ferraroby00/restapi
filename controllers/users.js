@@ -112,7 +112,7 @@ function getSequenceNextValue(seqName) {
   Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then(
     Counter.find({ name: seqName }).then((found) => {
       console.log(found);
-      return found.seqValue;
+      return found.seqNumber;
     })
   );
 }
