@@ -22,7 +22,7 @@ app.get('/home',(req,res) => {
 });
 
 //Connection to database
-mongoose.connect('mongodb+srv://:<password>@thesis.mvjviod.mongodb.net/ufr');
+mongoose.connect('mongodb+srv://R_Ferrareis:Tesi22__@thesis.mvjviod.mongodb.net/ufr');
 const con = mongoose.connection;
 con.on('open', () => {console.log('Connected to database');});
 con.on('error', () => {console.log('Error');});
