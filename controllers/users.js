@@ -13,9 +13,18 @@ export const getUsers = (req, res) => {
     });
 };
 
+function getSequenceNextValue(seqName) {
+  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then(
+    Counter.findOne({ name: seqName }).then((found) => {
+      console.log(found);
+      return found.seqNumber;
+    })
+  );
+}
+
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
-  const id = this.getSequenceNextValue("users");
+  const id = getSequenceNextValue("users");
   console.log(id);
   const user = new User({
     name: req.body.name,
@@ -110,11 +119,4 @@ export const updateUser = (req, res) => {
       });
 };
 
-function getSequenceNextValue(seqName) {
-  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then(
-    Counter.findOne({ name: seqName }).then((found) => {
-      console.log(found);
-      return found.seqNumber;
-    })
-  );
-}
+
