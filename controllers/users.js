@@ -15,13 +15,15 @@ export const getUsers = (req, res) => {
 
 //POST HANDLER - Inserts a new user document
 export const createUser = (req, res) => {
+  const id = getSequenceNextValue("users");
+  console.log(id);
   const user = new User({
     name: req.body.name,
     last: req.body.last,
     age: req.body.age,
     email: req.body.email,
     gender: req.body.gender,
-    userId: "" + getSequenceNextValue("users"),
+    userId: ""+id,
   });
   user
     .save()
