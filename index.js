@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import filmRoutes from './routes/films.js';
+import movieRoutes from './routes/movies.js';
 import userRoutes from './routes/users.js';
 import ratingRoutes from './routes/ratings.js';
 
@@ -10,7 +10,7 @@ const PORT = 5000;
 
 app.use(bodyParser.json());
 
-app.use('/films',filmRoutes);
+app.use('/movies',movieRoutes);
 
 app.use('/users',userRoutes);
 
