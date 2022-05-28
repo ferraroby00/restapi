@@ -1,20 +1,26 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import { getAll, insertRating, getRating, deleteRating, updateRating } from '../controllers/ratings.js';
+import {
+  getAll,
+  insertRating,
+  getRating,
+  deleteRating,
+  updateRating,
+} from "../controllers/ratings.js";
 
 //GET ALL RATINGS
-router.get('/', getAll);
+router.get("/", getAll);
 
 //INSERT A NEW RATING
-router.post('/',insertRating);
+router.post("/", insertRating);
 
 //GET RATING BY FILM ID
-router.get('/:id', getRating);
+router.get("/:id", getRating);
 
 //DELETE RATING BY ID
-router.delete('/:id', deleteRating);
+router.delete("/:id", deleteRating);
 
 //UPDATE USER BY ID
-router.patch('/:id', updateRating);
+router.patch("/:id", updateRating);
 
 export default router;
