@@ -15,8 +15,7 @@ export const getUsers = (req, res) => {
 
 function getSequenceNextValue(seqName) {
   Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then();
-  Counter.findOne({ name: seqName }).then((found) => {
-    console.log(found.seqNumber);
+  Counter.findOne({ name: seqName }, (found) => {
     return found.seqNumber;
   });
 }
@@ -29,7 +28,7 @@ export const createUser = (req, res) => {
     last: req.body.last,
     age: req.body.age,
     email: req.body.email,
-    gender: req.body.gender
+    gender: req.body.gender,
   });
   user
     .save()
