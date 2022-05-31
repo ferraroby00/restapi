@@ -1,16 +1,22 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
+import Movies from "../models/movies.js";
 //import Counter from "../models/counter.js";
 
 //GET HANDLER - Returns all users documents
 export const getUsers = (req, res) => {
-  User.find({})
-    .then(function (users) {
-      res.send(users);
-    })
-    .catch((err) => {
-      res.json({ message: err });
-    });
+  //If the URL contains a query string it has to be redirected to users/uname
+  if (req.query.uname) {
+    res.redirect("/users/" + req.query.uname);
+  } else {
+    User.find({})
+      .then(function (users) {
+        res.send(users);
+      })
+      .catch((err) => {
+        res.json({ message: err });
+      });
+  }
 };
 
 /*function getSequenceNextValue(seqName) {
@@ -42,20 +48,48 @@ export const createUser = (req, res) => {
     });
 };
 
-/*export const getPreferences = (req, res) => {
-  const user = User.find({ email: req.body.email }, (error,found) => {
-    if(error) res.json({ message: error });
+export const getPreferences = (req, res) => {
+  console.log(req.params);
+  async function funzione(trovato) {
+    console.log(trovato.length);
+    const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
+    const rand2 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
+    console.log(rand1 + " " + rand2);
+    let obj = {
+      choice1: trovato[rand1].movieId,
+      choice2: trovato[rand2].movieId,
+      user: null,
+    };
+    await Movies.findOne({ movieId: trovato[rand1].movieId }).then((found) => {
+      console.log(found);
+      res.locals.title1 = found.title;
+    });
+    await Movies.findOne({ movieId: trovato[rand2].movieId }).then((found) => {
+      console.log(found);
+      res.locals.title2 = found.title;
+    });
+    console.log(obj);
+    res.locals.user = req.params.uname;
+    res.render("preferences");
+  }
 
+  //let obj = { choice1: rand1, choice2: rand2, user: null };
+  Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
+    funzione(found);
   });
-  console.log(user);
-};*/
 
-//GET BY ID HANDLER - Returns a user by ID
+  /**/
+};
+
+//GET BY ID HANDLER - Returns a user by email
 export const getUser = (req, res) => {
-  const { id } = req.params;
-  User.findById(id)
+  const { uname } = req.params;
+  User.findOne({ username: uname })
     .then(function (found) {
-      res.send(found);
+      res.locals.user = found;
+      res.locals.title1 = undefined;
+      res.locals.title2 = undefined;
+      res.render("pair-wise");
     })
     .catch((err) => {
       res.json({ message: err });

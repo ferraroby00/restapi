@@ -16,10 +16,10 @@ router.get("/", getUsers);
 router.post("/", createUser);
 
 //
-router.post("/preference", getPreferences);
+router.get("/:uname/preferences", getPreferences);
 
 //GET USER BY ID
-router.get("/:id", getUser);
+router.get("/:uname", getUser);
 
 //DELETE USER BY ID
 router.delete("/:id", deleteUser);

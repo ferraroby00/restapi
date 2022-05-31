@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <% let rand1 = Math.floor((Math.random() * (193609-0)) +0);%>
-        <% let rand2 = Math.floor((Math.random() * (193609-0)) +0);%>
-    </head>
-    <body>
-        <div>
+  <head>
+    <!--<script>
+      var btn = document.getElementById("start");
+      btn.addEventListener("click", () => {
+        btn.style.display = "none";
+      });
+    </script>-->
+  </head>
 
-        </div>
-        <div>
-
-        </div>
-    </body>
+  <body>
+    <form method="get" action="/users">
+      <label for="uname">Inserire username: </label>
+      <input type="text" id="uname" name="uname" required autofocus />
+      <input type="submit" value="Accedi" />
+    </form>
+    <% if(user){ %>
+    <p>Utente autenticato: <%= user.name%> <%= user.last %></p>
+    <%} %>
+    <h1>Selezione preferenze film</h1>
+    <a href="http://localhost:5000/users/<%=user.username%>/preferences"
+      ><input type="button" value="Avvia" id="start"
+    /></a>
+    <% if(title1){ %>
+    <ul>
+      <li><%= title1 %></li>
+      <li><%= title2 %></li>
+    </ul>
+    <%} %>
+  </body>
 </html>

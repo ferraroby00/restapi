@@ -20,7 +20,10 @@ app.set("view engine", "ejs");
 
 //Homepage
 app.get('/home',(req,res) => {
-    res.send('Welcome to the homepage');
+    res.locals.user = undefined;
+    res.locals.title1 = undefined;
+    res.locals.title2 = undefined;
+    res.render('pair-wise');
 });
 
 //Connection to database
