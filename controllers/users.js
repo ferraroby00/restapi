@@ -49,26 +49,15 @@ export const createUser = (req, res) => {
 };
 
 export const getPreferences = (req, res) => {
-  console.log(req.params);
   async function funzione(trovato) {
-    console.log(trovato.length);
     const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
     const rand2 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
-    console.log(rand1 + " " + rand2);
-    let obj = {
-      choice1: trovato[rand1].movieId,
-      choice2: trovato[rand2].movieId,
-      user: null,
-    };
     await Movies.findOne({ movieId: trovato[rand1].movieId }).then((found) => {
-      console.log(found);
-      res.locals.title1 = found.title;
+      res.locals.film_one = found;
     });
     await Movies.findOne({ movieId: trovato[rand2].movieId }).then((found) => {
-      console.log(found);
-      res.locals.title2 = found.title;
+      res.locals.film_two = found;
     });
-    console.log(obj);
     res.locals.user = req.params.uname;
     res.render("preferences");
   }
@@ -79,6 +68,25 @@ export const getPreferences = (req, res) => {
   });
 
   /**/
+};
+
+export const postPreference = (req, res) => {
+  console.log(req.body);
+  let obj = {
+    choice1: req.body.movie_one,
+    choice2: req.body.movie_two,
+    user: req.body.opz,
+  };
+  console.log(obj);
+  console.log(req.params.uname);
+  User.findOne({ username: req.params.uname }).then((found) => {
+    let mod = found.preferences.push(obj);
+    User.updateOne(
+      { username: req.params.uname },
+      { $set: { preferences: mod } }
+    );
+  });
+  res.redirect("/users/" + req.params.uname + "/preferences");
 };
 
 //GET BY ID HANDLER - Returns a user by email

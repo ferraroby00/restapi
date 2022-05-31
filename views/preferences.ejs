@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <!--<script>
       var btn = document.getElementById("start");
       btn.addEventListener("click", () => {
         btn.style.display = "none";
       });
     </script>-->
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>Selezione preferenze film</h1>
-    <a href="http://localhost:5000/users/<%=user%>/preferences"
-      ><input type="button" value="Avvia" id="start"
-    /></a>
-    <% if(title1){ %>
-    <ul>
-      <li><%= title1 %></li>
-      <li><%= title2 %></li>
-    </ul>
-    <%} %>
-  </body>
+    <a href="http://localhost:5000/users/<%=user%>/preferences"><input type="button" value="Avvia" id="start" /></a>
+    <ol>
+        <li>
+            <%= film_one.title %>
+        </li>
+        <li>
+            <%= film_two.title %>
+        </li>
+    </ol>
+
+    <form method="post" action="/users/<%=user%>/preferences">
+        <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
+        <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>" />
+        <input type="radio" id="opz_one" name="opz" value="<%=film_one.movieId%>" />
+        <label for="opz_one">Opzione 1</label><br />
+        <input type="radio" id="opz_two" name="opz" value="<%=film_two.movieId%>" />
+        <label for="opz_two">Opzione 2</label><br />
+        <input type="submit" value="Continua" />
+    </form>
+
+</body>
+
 </html>

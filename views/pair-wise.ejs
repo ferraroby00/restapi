@@ -18,15 +18,5 @@
     <% if(user){ %>
     <p>Utente autenticato: <%= user.name%> <%= user.last %></p>
     <%} %>
-    <h1>Selezione preferenze film</h1>
-    <a href="http://localhost:5000/users/<%=user.username%>/preferences"
-      ><input type="button" value="Avvia" id="start"
-    /></a>
-    <% if(title1){ %>
-    <ul>
-      <li><%= title1 %></li>
-      <li><%= title2 %></li>
-    </ul>
-    <%} %>
   </body>
 </html>
