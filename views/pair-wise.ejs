@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!--<script>
-      var btn = document.getElementById("start");
-      btn.addEventListener("click", () => {
-        btn.style.display = "none";
-      });
-    </script>-->
-  </head>
 
-  <body>
+<head>
+  <title>
+    Home
+  </title>
+  <script>
+    function showButton() {
+      document.getElementById("pref").style.display = "block";
+      document.getElementById("login").style.display = "none";
+    }
+  </script>
+</head>
+
+<body>
+
+  <p>
+  <fieldset>
+    <legend>Inserire username</legend>
     <form method="get" action="/users">
-      <label for="uname">Inserire username: </label>
       <input type="text" id="uname" name="uname" required autofocus />
-      <input type="submit" value="Accedi" />
-    </form>
-    <% if(user){ %>
-    <p>Utente autenticato: <%= user.name%> <%= user.last %></p>
-    <%} %>
-  </body>
+  </fieldset>
+  </p>
+  <input type="submit" value="Accedi" id="login" style="display: block;" onclick="showButton()" />
+  </form>
+
+  <input type="button" value="Procedi alle preferenze" id="pref" style="display: none;">
+
+  <p>
+    <% if(user) { %>
+      Utente autenticato: <%= user.name%> <%= user.last %>
+    <% } %>
+  </p>
+
+</body>
+
 </html>

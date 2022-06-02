@@ -2,6 +2,9 @@
 <html>
 
 <head>
+    <title>
+        Preferenza film
+    </title>
     <!--<script>
       var btn = document.getElementById("start");
       btn.addEventListener("click", () => {
@@ -11,27 +14,27 @@
 </head>
 
 <body>
-    <h1>Selezione preferenze film</h1>
-    <a href="http://localhost:5000/users/<%=user%>/preferences"><input type="button" value="Avvia" id="start" /></a>
-    <ol>
-        <li>
-            <%= film_one.title %>
-        </li>
-        <li>
-            <%= film_two.title %>
-        </li>
-    </ol>
+    <p><a href="http://localhost:5000/users/<%=user%>/preferences"></a>
+    </p>
 
-    <form method="post" action="/users/<%=user%>/preferences">
-        <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
-        <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>" />
-        <input type="radio" id="opz_one" name="opz" value="<%=film_one.movieId%>" />
-        <label for="opz_one">Opzione 1</label><br />
-        <input type="radio" id="opz_two" name="opz" value="<%=film_two.movieId%>" />
-        <label for="opz_two">Opzione 2</label><br />
-        <input type="submit" value="Continua" />
+    <p>
+    <fieldset>
+        <legend>Seleziona una delle due opzioni</legend>
+        <form method="post" action="/users/<%=user%>/preferences">
+            <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
+            <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>" />
+            <input type="radio" id="opz_one" name="opz" value="<%=film_one.movieId%>" />
+            <label for="opz_one">
+                <%= film_one.title %>
+            </label><br>
+            <input type="radio" id="opz_two" name="opz" value="<%=film_two.movieId%>" />
+            <label for="opz_two">
+                <%= film_two.title %>
+            </label>
+    </fieldset>
+    </p>
+    <input type="submit" value="Continua" onclick="return confirm('Confermare la scelta?')" />
     </form>
-
 </body>
 
 </html>

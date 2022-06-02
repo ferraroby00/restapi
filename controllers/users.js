@@ -97,7 +97,7 @@ export const getUser = (req, res) => {
       res.locals.user = found;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
-      res.render("pair-wise");
+      res.render("pair-wise"); //capire come modificare html prima di renderizzare
     })
     .catch((err) => {
       res.json({ message: err });
