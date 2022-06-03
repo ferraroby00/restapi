@@ -1,7 +1,7 @@
 import Rating from "../models/rating.js";
 import mongoose from "mongoose";
 
-//GET HANDLER - Returns all movies documents
+//GET HANDLER - returns all movies documents
 export const getAll = (req, res) => {
   Rating.aggregate([
     { $match: { rating: { $exists: true } } },
@@ -36,7 +36,7 @@ export const getAll = (req, res) => {
     });
 };
 
-//POST HANDLER - Inserts a new rating document
+//POST HANDLER - inserts a new rating document
 export const insertRating = (req, res) => {
   const rating = new Rating({
     ratedBy: mongoose.Types.ObjectId(req.body.ratedBy),
@@ -53,7 +53,7 @@ export const insertRating = (req, res) => {
     });
 };
 
-//GET BY ID HANDLER - Returns a rating by film ID
+//GET BY ID HANDLER - returns a rating by film ID
 export const getRating = (req, res) => {
   const { id } = req.params;
   Rating.aggregate([
@@ -90,7 +90,7 @@ export const getRating = (req, res) => {
     });
 };
 
-//DELETE BY ID HANDLER - Deletes a rating by ID
+//DELETE BY ID HANDLER - deletes a rating by ID
 export const deleteRating = (req, res) => {
   const { id } = req.params;
   Rating.deleteOne({ _id: id })
@@ -102,7 +102,7 @@ export const deleteRating = (req, res) => {
     });
 };
 
-//PATCH BY ID HANDLER - Updates a movie by ID and by specific fields stored in HTTP request body
+//PATCH BY ID HANDLER - updates a movie by ID and by specific fields stored in HTTP request body
 export const updateRating = (req, res) => {
   const { id } = req.params;
   const { rating } = req.body;

@@ -7,33 +7,28 @@ import {
   deleteUser,
   updateUser,
   getPreferences,
-  postPreference
+  postPreference,
 } from "../controllers/users.js";
 
-//GET ALL USERS
+//get all users
 router.get("/", getUsers);
 
-//CREATE A NEW USER
+//insert user
 router.post("/", createUser);
 
-//
+//get to pair-wise preferences by username
 router.get("/:uname/preferences", getPreferences);
 
+//send preference object contaning the two options and the choice, by username
 router.post("/:uname/preferences", postPreference);
 
-//GET USER BY ID
+//get all user by username
 router.get("/:uname", getUser);
 
-//DELETE USER BY ID
+//delete user by Id
 router.delete("/:id", deleteUser);
 
-//UPDATE USER BY ID
+//update user by Id
 router.patch("/:id", updateUser);
-
-//GET RATINGS
-router.get("/ratings" /**/);
-
-//GET RATING BY TITLE
-router.get("/ratings/:title" /**/);
 
 export default router;

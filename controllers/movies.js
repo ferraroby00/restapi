@@ -1,7 +1,7 @@
 import Movie from "../models/movies.js";
 import Rating from "../models/rating.js";
 
-//GET HANDLER - Returns all movies documents
+//GET HANDLER - returns all movies documents
 export const getMovies = (req, res) => {
   Movie.find({})
     .then(function (films) {
@@ -12,7 +12,7 @@ export const getMovies = (req, res) => {
     });
 };
 
-//POST HANDLER - Inserts a new movie document
+//POST HANDLER - inserts a new movie document
 export const insertMovie = (req, res) => {
   const movie = new Movie({
     movieId: req.body.movieId,
@@ -29,7 +29,7 @@ export const insertMovie = (req, res) => {
     });
 };
 
-//GET BY ID HANDLER - Returns a movie by ID
+//GET BY ID HANDLER - returns a movie by Id
 export const getMovie = (req, res) => {
   const { id } = req.params;
   Movie.find({ movieId: id })
@@ -41,7 +41,7 @@ export const getMovie = (req, res) => {
     });
 };
 
-//DELETE BY ID HANDLER - Deletes a movie by ID
+//DELETE BY ID HANDLER - deletes a movie by Id
 export const deleteMovie = (req, res) => {
   const { id } = req.params;
   Movie.deleteOne({ movieId: id })
@@ -51,7 +51,6 @@ export const deleteMovie = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
-
   /*
   //Deletes ratings associated to the deleted film
   Rating.deleteMany({ filmId: id }).catch((err) => {
@@ -59,7 +58,7 @@ export const deleteMovie = (req, res) => {
   });*/
 };
 
-//PATCH BY ID HANDLER - Updates a movie by ID and by specific fields stored in HTTP request body
+//PATCH BY ID HANDLER - updates a movie by Id and by specific fields stored in HTTP request body
 export const updateMovie = (req, res) => {
   const { id } = req.params;
   const { title, genres } = req.body;

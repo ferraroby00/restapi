@@ -9,7 +9,9 @@ const app = express();
 const PORT = 5000;
 
 app.use(express.json());
-app.use(express.urlencoded({extended: false}))
+
+app.use(express.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 app.use("/movies", movieRoutes);
@@ -20,7 +22,7 @@ app.use("/ratings", ratingRoutes);
 
 app.set("view engine", "ejs");
 
-//Homepage
+//homepage
 app.get("/home", (req, res) => {
   res.locals.user = undefined;
   res.locals.title1 = undefined;
@@ -28,19 +30,19 @@ app.get("/home", (req, res) => {
   res.render("pair-wise");
 });
 
-//Connection to database
+//connection to database
 mongoose.connect(
   "mongodb+srv://R_Ferrareis:Tesi22__@thesis.mvjviod.mongodb.net/ufr"
 );
 const con = mongoose.connection;
 con.on("open", () => {
-  console.log("Connected to database");
+  console.log("Connesso al databse");
 });
 con.on("error", () => {
-  console.log("Error");
+  console.log("Errore nella connesione al database");
 });
 
-//Server listening on port PORT
+//server listening on port PORT
 app.listen(PORT, () =>
-  console.log(`Server running on port: http://localhost:${PORT}`)
+  console.log(`Serve in ascolto alla porta: http://localhost:${PORT}`)
 );

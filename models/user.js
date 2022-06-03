@@ -27,12 +27,12 @@ const UserSchema = mongoose.Schema({
   },
   username: {
     type: String,
-    required: true
+    required: true,
   },
   preferences: {
     type: Array,
-    default: []
-  }
+    default: [],
+  },
 });
 
 export default mongoose.model("Users", UserSchema);

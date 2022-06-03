@@ -8,19 +8,19 @@ import {
   updateMovie,
 } from "../controllers/movies.js";
 
-//GET ALL FILMS
+//get all movies
 router.get("/", getMovies);
 
-//INSERT A NEW MOVIE
+//insert movie
 router.post("/", insertMovie);
 
-//GET FILM BY ID
+//get movie by Id
 router.get("/:id", getMovie);
 
-//DELETE FILM BY ID
+//delete movie by Id
 router.delete("/:id", deleteMovie);
 
-//UPDATE USER BY ID
+//update movie by Id
 router.patch("/:id", updateMovie);
 
 export default router;

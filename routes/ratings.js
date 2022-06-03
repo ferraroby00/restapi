@@ -8,19 +8,19 @@ import {
   updateRating,
 } from "../controllers/ratings.js";
 
-//GET ALL RATINGS
+//get all ratings
 router.get("/", getAll);
 
-//INSERT A NEW RATING
+//insert new rating
 router.post("/", insertRating);
 
-//GET RATING BY FILM ID
+//get rating by Id
 router.get("/:id", getRating);
 
-//DELETE RATING BY ID
+//delete rating by Id
 router.delete("/:id", deleteRating);
 
-//UPDATE USER BY ID
+//update rating by Id
 router.patch("/:id", updateRating);
 
 export default router;
