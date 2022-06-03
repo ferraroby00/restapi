@@ -97,8 +97,7 @@ export const getUser = (req, res) => {
       res.locals.user = found;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
-      res.redirect("/users/" + req.params.uname + "/preferences"); //capire come modificare html prima di renderizzare
-      
+      res.redirect("/users/" + req.params.uname + "/preferences");
     })
     .catch((err) => {
       res.json({ message: err });
