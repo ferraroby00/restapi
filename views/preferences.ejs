@@ -7,8 +7,7 @@
     </title>
     <script>
         function start() {
-            let counter = 0;
-            document.getElementById("scelta").style.visibility = "block";
+            document.getElementById("scelta").style.display = "block";
         }
     </script>
 </head>
@@ -17,11 +16,10 @@
     <p><a href="http://localhost:5000/users/<%=user%>/preferences"></a>
     </p>
 
-    <p><input type="button" id="start" name="start" value="Avvia" onclick="start()"></p>
-
-    <p>
-    <fieldset id="scelta" style="display: none;">
-        <legend>Seleziona una delle due opzioni</legend>
+    <!-- <p><input type="button" id="start" name="start" value="Avvia" onclick=start()></p> -->
+    <fieldset>
+        <p>
+            <legend>Seleziona una delle due opzioni</legend>
         <form method="post" action="/users/<%=user%>/preferences">
             <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
             <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>" />
@@ -35,8 +33,11 @@
             </label>
 
             </p>
-            <input type="submit" value="Continua" onclick="return confirm('Confermare la scelta?')" />
+            <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');" />
         </form>
+        <% if(count === 3){ %>
+        <a href="about:blank"><input type="button" id="stop" name="stop" value="Termina registrazione"></a>
+        <% } %>
     </fieldset>
 </body>
 

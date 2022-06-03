@@ -36,13 +36,13 @@ mongoose.connect(
 );
 const con = mongoose.connection;
 con.on("open", () => {
-  console.log("Connesso al databse");
+  console.log("Connesso al database");
 });
 con.on("error", () => {
-  console.log("Errore nella connesione al database");
+  console.log("Errore nella connessione al database");
 });
 
 //server listening on port PORT
 app.listen(PORT, () =>
-  console.log(`Serve in ascolto alla porta: http://localhost:${PORT}`)
+  console.log(`Server in ascolto alla porta: http://localhost:${PORT}`)
 );

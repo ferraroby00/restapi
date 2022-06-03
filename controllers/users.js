@@ -2,11 +2,12 @@ import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
 //import Counter from "../models/counter.js";
-
+let counter = 0;
 //GET HANDLER - Returns all users documents
 export const getUsers = (req, res) => {
   //If the URL contains a query string it has to be redirected to users/uname
   if (req.query.uname) {
+    counter = 0;
     res.redirect("/users/" + req.query.uname);
   } else {
     User.find({})
@@ -47,7 +48,6 @@ export const createUser = (req, res) => {
       res.json({ message: err });
     });
 };
-
 export const getPreferences = (req, res) => {
   async function funzione(trovato) {
     const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
@@ -58,6 +58,8 @@ export const getPreferences = (req, res) => {
     await Movies.findOne({ movieId: trovato[rand2].movieId }).then((found) => {
       res.locals.film_two = found;
     });
+    res.locals.count = counter;
+    console.log(res.locals.count);
     res.locals.user = req.params.uname;
     res.render("preferences");
   }
@@ -89,7 +91,7 @@ export const postPreference = (req, res) => {
     User.updateOne(
       { username: req.params.uname },
       { $set: { preferences: found.preferences } }
-    ).then(() => {});
+    ).then(() => {counter = counter + 1;});
   });
   // Redirection to the preference view
   res.redirect("/users/" + req.params.uname + "/preferences");
