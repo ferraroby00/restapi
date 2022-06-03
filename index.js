@@ -27,7 +27,7 @@ app.get("/home", (req, res) => {
   res.locals.user = undefined;
   res.locals.title1 = undefined;
   res.locals.title2 = undefined;
-  res.render("pair-wise");
+  res.render("home");
 });
 
 //connection to database

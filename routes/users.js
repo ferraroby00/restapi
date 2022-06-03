@@ -22,7 +22,7 @@ router.get("/:uname/preferences", getPreferences);
 //send preference object contaning the two options and the choice, by username
 router.post("/:uname/preferences", postPreference);
 
-//get all user by username
+//get user by username
 router.get("/:uname", getUser);
 
 //delete user by Id

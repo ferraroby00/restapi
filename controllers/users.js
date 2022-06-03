@@ -105,7 +105,7 @@ export const getUser = (req, res) => {
       res.locals.user = found;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
-      res.redirect("/users/" + req.params.uname + "/preferences");
+      res.redirect("/users/" + req.params.uname + "/loggedUser");
     })
     .catch((err) => {
       res.json({ message: err });

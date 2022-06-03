@@ -5,18 +5,12 @@
     <title>
         Preferenza film
     </title>
-    <script>
-        function start() {
-            document.getElementById("scelta").style.display = "block";
-        }
-    </script>
 </head>
 
 <body>
     <p><a href="http://localhost:5000/users/<%=user%>/preferences"></a>
     </p>
 
-    <!-- <p><input type="button" id="start" name="start" value="Avvia" onclick=start()></p> -->
     <fieldset>
         <p>
             <legend>Seleziona una delle due opzioni</legend>
@@ -35,8 +29,8 @@
             </p>
             <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');" />
         </form>
-        <% if(count === 3){ %>
-        <a href="about:blank"><input type="button" id="stop" name="stop" value="Termina registrazione"></a>
+        <% if(count === 3) { %>
+            <a href="http://localhost:5000/home"><input type="button" id="stop" name="stop" value="Termina registrazione"></a>
         <% } %>
     </fieldset>
 </body>
