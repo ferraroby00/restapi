@@ -32,7 +32,7 @@ app.get("/home", (req, res) => {
 
 //connection to database
 mongoose.connect(
-  "mongodb+srv://R_Ferrareis:Tesi22__@thesis.mvjviod.mongodb.net/ufr"
+  "mongodb+srv://restapi:tesi_restAPI@thesis.mvjviod.mongodb.net/ufr"
 );
 const con = mongoose.connection;
 con.on("open", () => {
