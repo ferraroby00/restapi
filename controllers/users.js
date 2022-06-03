@@ -78,7 +78,7 @@ export const postPreference = (req, res) => {
     choice2: req.body.movie_two,
     user: req.body.opz,
   };
-  console.log("Utente che sta esprimento preferenza: "+req.params.uname);
+  console.log("Utente che sta esprimendo preferenza: "+req.params.uname);
   // Finding user based on the reference passed by URL
   User.findOne({ username: req.params.uname }).then((found) => {
     console.log(found);
