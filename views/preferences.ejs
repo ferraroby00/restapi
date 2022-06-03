@@ -5,14 +5,22 @@
     <title>
         Preferenza film
     </title>
+    <script>
+        function start() {
+            let counter = 0;
+            document.getElementById("scelta").style.visibility = "block";
+        }
+    </script>
 </head>
 
 <body>
     <p><a href="http://localhost:5000/users/<%=user%>/preferences"></a>
     </p>
 
+    <p><input type="button" id="start" name="start" value="Avvia" onclick="start()"></p>
+
     <p>
-    <fieldset>
+    <fieldset id="scelta" style="display: none;">
         <legend>Seleziona una delle due opzioni</legend>
         <form method="post" action="/users/<%=user%>/preferences">
             <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
@@ -25,10 +33,11 @@
             <label for="opz_two">
                 <%= film_two.title %>
             </label>
+
+            </p>
+            <input type="submit" value="Continua" onclick="return confirm('Confermare la scelta?')" />
+        </form>
     </fieldset>
-    </p>
-    <input type="submit" value="Continua" onclick="return confirm('Confermare la scelta?')" />
-    </form>
 </body>
 
 </html>
