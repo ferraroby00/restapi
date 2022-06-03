@@ -70,24 +70,28 @@ export const getPreferences = (req, res) => {
   /**/
 };
 
+//PREFERENCE POST HANDLER
 export const postPreference = (req, res) => {
-  console.log(req.body);
+  // Creating the object to be stored in user
   let obj = {
     choice1: req.body.movie_one,
     choice2: req.body.movie_two,
     user: req.body.opz,
   };
-  console.log(obj);
-  console.log(req.params.uname);
+  console.log("Utente che sta esprimento preferenza: "+req.params.uname);
+  // Finding user based on the reference passed by URL
   User.findOne({ username: req.params.uname }).then((found) => {
     console.log(found);
-    let mod = found.preferences.push(obj);
+    // Pushing new preference object in user document
+    found.preferences.push(obj);
     console.log(found.preferences);
+    // Updating the user overriding the array
     User.updateOne(
       { username: req.params.uname },
-      { $set: { preferences: mod } }
-    ).then((updatedDoc) => {console.log(updatedDoc)});
+      { $set: { preferences: found.preferences } }
+    ).then(() => {});
   });
+  // Redirection to the preference view
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
 
