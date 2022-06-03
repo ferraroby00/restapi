@@ -80,11 +80,13 @@ export const postPreference = (req, res) => {
   console.log(obj);
   console.log(req.params.uname);
   User.findOne({ username: req.params.uname }).then((found) => {
+    console.log(found);
     let mod = found.preferences.push(obj);
+    console.log(found.preferences);
     User.updateOne(
       { username: req.params.uname },
       { $set: { preferences: mod } }
-    );
+    ).then((updatedDoc) => {console.log(updatedDoc)});
   });
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
