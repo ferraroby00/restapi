@@ -1,11 +1,11 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
-//import Counter from "../models/counter.js";
+
 let counter = 0;
-//GET HANDLER - Returns all users documents
+//GET HANDLER - returns all users documents
 export const getUsers = (req, res) => {
-  //If the URL contains a query string it has to be redirected to users/uname
+  //if the URL contains a query string it has to be redirected to users/uname
   if (req.query.uname) {
     counter = 0;
     res.redirect("/users/" + req.query.uname);
@@ -20,16 +20,7 @@ export const getUsers = (req, res) => {
   }
 };
 
-/*function getSequenceNextValue(seqName) {
-  Counter.updateOne({ name: seqName }, { $inc: { seqNumber: 1 } }).then();
-  Counter.findOne({ name: seqName }, (error, found) => {
-    console.log(found);
-    counter = found.seqNumber;
-    console.log()
-  });
-}*/
-
-//POST HANDLER - Inserts a new user document
+//POST HANDLER - inserts a new user document
 export const createUser = (req, res) => {
   const user = new User({
     name: req.body.name,
@@ -48,6 +39,8 @@ export const createUser = (req, res) => {
       res.json({ message: err });
     });
 };
+
+//POST HANDLER - randomically generate movie pairs
 export const getPreferences = (req, res) => {
   async function funzione(trovato) {
     const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
@@ -63,41 +56,34 @@ export const getPreferences = (req, res) => {
     res.locals.user = req.params.uname;
     res.render("preferences");
   }
-
-  //let obj = { choice1: rand1, choice2: rand2, user: null };
-  Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
-    funzione(found);
-  });
-
-  /**/
 };
 
 //PREFERENCE POST HANDLER
 export const postPreference = (req, res) => {
-  // Creating the object to be stored in user
+  //creating the object to be stored in user
   let obj = {
     choice1: req.body.movie_one,
     choice2: req.body.movie_two,
     user: req.body.opz,
   };
   console.log("Utente che sta esprimendo preferenza: "+req.params.uname);
-  // Finding user based on the reference passed by URL
+  //finding user based on the reference passed by URL
   User.findOne({ username: req.params.uname }).then((found) => {
     console.log(found);
-    // Pushing new preference object in user document
+    //pushing new preference object in user document
     found.preferences.push(obj);
     console.log(found.preferences);
-    // Updating the user overriding the array
+    //updating the user overriding the array
     User.updateOne(
       { username: req.params.uname },
       { $set: { preferences: found.preferences } }
     ).then(() => {counter = counter + 1;});
   });
-  // Redirection to the preference view
+  //redirection to the preference view
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
 
-//GET BY ID HANDLER - Returns a user by email
+//GET BY ID HANDLER - returns a user by username
 export const getUser = (req, res) => {
   const { uname } = req.params;
   User.findOne({ username: uname })
@@ -105,14 +91,14 @@ export const getUser = (req, res) => {
       res.locals.user = found;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
-      res.redirect("/users/" + req.params.uname + "/loggedUser");
+      res.render("loggedUser", { user: found});
     })
     .catch((err) => {
       res.json({ message: err });
     });
 };
 
-//DELETE BY ID HANDLER - Deletes a user by ID
+//DELETE BY ID HANDLER - deletes a user by ID
 export const deleteUser = (req, res) => {
   const { id } = req.params;
   User.deleteOne({ _id: id })
@@ -122,13 +108,13 @@ export const deleteUser = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
-  //Deletes ratings associated to the deleted user
+  //deletes ratings associated to the deleted user
   Rating.deleteMany({ ratedBy: id }).catch((err) => {
     res.json({ message: err });
   });
 };
 
-//PATCH BY ID HANDLER - Updates a user by ID and by specific fields stored in HTTP request body
+//PATCH BY ID HANDLER - updates a user by ID and by specific fields stored in HTTP request body
 export const updateUser = (req, res) => {
   const { id } = req.params;
   const { name, last, age, email, gender } = req.body;

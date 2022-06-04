@@ -15,21 +15,18 @@
     <p>
         <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
     </p>
-    <form id="editForm" style="display: none">
-        Nome: <% user.name %>&nbsp|&nbsp<input type="text" /><br />
-        Cognome: <% user.last %>&nbsp|&nbsp<input type="text" /><br />
-        Età: <% user.age %>&nbsp|&nbsp<input type="text" /><br />
-        Genere: <% user.gender %>&nbsp|&nbsp<input type="text" /><br />
-        Username: <% user.username %>&nbsp|&nbsp<input type="text" /><br />
-        E-mail: <% user.email %>&nbsp|&nbsp<input type="text" /><br />
-        <input type="button" id="save" name="save" value="Salva" />
+    <form method="post" action="" id="editForm" style="display: none">
+        Nome: <%= user.name %>&nbsp|&nbsp<input type="text">;
+        Cognome: <%= user.last %>&nbsp|&nbsp<input type="text">;
+        Età: <%= user.age %>&nbsp|&nbsp<input type="number" min="1" max="110">;
+        Genere: <%= user.gender %>&nbsp|&nbsp<input type="text">;
+        E-mail: <%= user.email %>&nbsp|&nbsp<input type="email">.
+        <input type="button" id="save" name="save" value="Salva">
     </form>
     <p>
-    
-    <form method="get" action="/preferences">
-        <input type="button" id="pref" name="pref" value="Scelta delle preferenze" />
-    </form>
-    </p>
+        <form method="get" action="/users/<%= user.username %>/preferences">
+            <input type="submit" value="Vai alle preferenze">
+        </form>
 </body>
 
 </html>

@@ -5,6 +5,11 @@
   <title>
     Home
   </title>
+  <script>
+    function showForm() {
+      document.getElementById("signin").style.display = "block";
+    }
+  </script>
 </head>
 
 <body>
@@ -17,10 +22,17 @@
   </form>
 
   <p>
-    <input type="button" id="signin" name="signin" value="Registrati">
+    <input type="button" id="showForm" name="showForm" value="Registrati" onclick="showForm()">
+  <form id="signin" method="post" action="/users" style="display: none;">
+    Nome:&nbsp<input type="text">
+    Cognome:&nbsp<input type="text">
+    Età:&nbsp<input type="number" min="1" max="110">
+    Genere:&nbsp<input type="text">
+    E-mail:&nbsp<input type="email">
+    Username:&nbsp<input type="text">
+    <input type="submit" id="confirm" name="confirm" value="Invia">
+  </form>
   </p>
-
-
 </body>
 
 </html>
