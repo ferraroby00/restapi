@@ -42,7 +42,9 @@ export const createUser = (req, res) => {
 
 //POST HANDLER - randomically generate movie pairs
 export const getPreferences = (req, res) => {
+  //Async function to exec the query: the controller stops until each query gets data
   async function funzione(trovato) {
+    //Generating random indexes for the movieIds array
     const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
     const rand2 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
     await Movies.findOne({ movieId: trovato[rand1].movieId }).then((found) => {
@@ -56,6 +58,11 @@ export const getPreferences = (req, res) => {
     res.locals.user = req.params.uname;
     res.render("preferences");
   }
+  //Query to extract the full list of movieIds
+  Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
+    //Invokes the actual controller
+    funzione(found);
+  });
 };
 
 //PREFERENCE POST HANDLER
