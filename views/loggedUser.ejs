@@ -19,13 +19,13 @@
     <p>
         <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
     </p>
-    <form method="post" action="" id="editForm" style="display: none">
+    <form method="post" action="/users/<%= user.username %>?patch=PATCH" id="editForm" style="display: none">
         Nome: <%= user.name %>&nbsp|&nbsp<input type="text" name="name">;
         Cognome: <%= user.last %>&nbsp|&nbsp<input type="text" name="last">;
-        Età: <%= user.age %>&nbsp|&nbsp<input type="number" min="1" max="110" name="last">;
-        Genere: <%= user.gender %>&nbsp|&nbsp<input type="text" name="gender">;
+        Età: <%= user.age %>&nbsp|&nbsp<input type="number" min="1" max="110" name="age">;
         E-mail: <%= user.email %>&nbsp|&nbsp<input type="email" name="email">.
-        <input type="button" id="save" name="save" value="Salva">
+        Genere: <%= user.gender %>&nbsp|&nbsp<input type="text" name="gender">;
+        <input type="submit" id="save" name="save" value="Salva">
     </form>
     <p>
     <form method="get" action="/users/<%= user.username %>/preferences">

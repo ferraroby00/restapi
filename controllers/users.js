@@ -36,8 +36,8 @@ export const createUser = (req, res) => {
     user
       .save()
       .then(() => {
-        //return to homepage after successful registration (flag needed to display success message)
-        res.render("home", { flag: true });
+        //returns to homepage after successful registration (flag: 1 needed to display success message in home.ejs)
+        res.render("home", { flag: 1 });
       })
       .catch((err) => {
         res.json({ message: err });
@@ -133,47 +133,47 @@ export const deleteUser = (req, res) => {
   });
 };
 
-//PATCH BY ID HANDLER - updates a user by ID and by specific fields stored in HTTP request body
+//PATCH BY ID HANDLER - updates a user by username and by specific fields stored in HTTP request body
 export const updateUser = (req, res) => {
-  const { id } = req.params;
+  const { uname } = req.params;
   const { name, last, age, email, gender } = req.body;
-
+  //checks if every fild is valid and if so applies the update (flag: 2 needed to display success message in home.ejs)
   if (name)
-    User.updateOne({ _id: id }, { $set: { name: name } })
+    User.updateOne({ username: uname }, { $set: { name: name } })
       .then(() => {
-        res.send(`User with id: ${id} updated`);
+        res.render("home", { flag: 2 });
       })
       .catch((err) => {
         res.json({ message: err });
       });
   if (last)
-    User.updateOne({ _id: id }, { $set: { last: last } })
+    User.updateOne({ username: uname }, { $set: { last: last } })
       .then(() => {
-        res.send(`User with id: ${id} updated`);
+        res.render("home", { flag: 2 });
       })
       .catch((err) => {
         res.json({ message: err });
       });
   if (age)
-    User.updateOne({ _id: id }, { $set: { age: age } })
+    User.updateOne({ username: uname }, { $set: { age: age } })
       .then(() => {
-        res.send(`User with id: ${id} updated`);
+        res.render("home", { flag: 2 });
       })
       .catch((err) => {
         res.json({ message: err });
       });
   if (email)
-    User.updateOne({ _id: id }, { $set: { email: email } })
+    User.updateOne({ username: uname }, { $set: { email: email } })
       .then(() => {
-        res.send(`User with id: ${id} updated`);
+        res.render("home", { flag: 2 });
       })
       .catch((err) => {
         res.json({ message: err });
       });
   if (gender)
-    User.updateOne({ _id: id }, { $set: { gender: gender } })
+    User.updateOne({ username: uname }, { $set: { gender: gender } })
       .then(() => {
-        res.send(`User with id: ${id} updated`);
+        res.render("home", { flag: 2 });
       })
       .catch((err) => {
         res.json({ message: err });

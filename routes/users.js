@@ -1,5 +1,5 @@
 import express from "express";
-const router = express.Router();
+import methodOverride from "method-override";
 import {
   getUsers,
   createUser,
@@ -9,6 +9,12 @@ import {
   getPreferences,
   postPreference,
 } from "../controllers/users.js";
+
+const router = express.Router();
+
+router.use(methodOverride("patch", "delete", {
+  methods: ["POST", "POST"]
+}));
 
 //get all users
 router.get("/", getUsers);
@@ -29,6 +35,6 @@ router.get("/:uname", getUser);
 router.delete("/:id", deleteUser);
 
 //update user by Id
-router.patch("/:id", updateUser);
+router.patch("/:uname", updateUser);
 
 export default router;

@@ -36,9 +36,11 @@
     </p>
 
     <p id="success" style="display: block;">
-    <% if(flag === true) { %>
+    <% if(flag === 1) { %>
         Utente registrato con successo!
-        <% } %>
+        <% } else if(flag === 2) { %>
+            Informazioni aggiornate con successo!
+            <% } %> 
     </p>
 </body>
 
