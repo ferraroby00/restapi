@@ -42,7 +42,8 @@ export const createUser = (req, res) => {
         res.json({ message: err });
       });
   }
-  //get number of users already registered and increment by 1 to obtain new userId
+
+  //gets number of users already registered and increment by 1 to obtain new userId
   User.countDocuments({}, (err, count) => {
     add(count);
   });
