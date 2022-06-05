@@ -12,8 +12,8 @@ import {
 
 const router = express.Router();
 
-router.use(methodOverride("patch", "delete", {
-  methods: ["POST", "POST"]
+router.use(methodOverride('patch', {
+  methods: ["POST"]
 }));
 
 //get all users
@@ -22,17 +22,17 @@ router.get("/", getUsers);
 //insert user
 router.post("/", createUser);
 
+//get user by username
+router.get("/:uname", getUser);
+
 //get to pair-wise preferences by username
 router.get("/:uname/preferences", getPreferences);
 
 //send preference object contaning the two options and the choice, by username
 router.post("/:uname/preferences", postPreference);
 
-//get user by username
-router.get("/:uname", getUser);
-
 //delete user by Id
-router.delete("/:id", deleteUser);
+router.delete("/:uname", deleteUser);
 
 //update user by Id
 router.patch("/:uname", updateUser);

@@ -119,10 +119,10 @@ export const getUser = (req, res) => {
 
 //DELETE BY ID HANDLER - deletes a user by ID
 export const deleteUser = (req, res) => {
-  const { id } = req.params;
-  User.deleteOne({ _id: id })
+  const { uname } = req.params;
+  User.deleteOne({ username: uname })
     .then(() => {
-      res.send(`User with id: ${id} deleted from database`);
+      res.send(`${username} eliminato`);
     })
     .catch((err) => {
       res.json({ message: err });
