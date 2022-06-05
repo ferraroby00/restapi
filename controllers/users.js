@@ -22,26 +22,30 @@ export const getUsers = (req, res) => {
 
 //POST HANDLER - inserts a new user document
 export const createUser = (req, res) => {
-  //get number of users already registered and increment by 1 to obtain new userId
-  const { userNum } = User.countDocuments({})
-  const user = new User({
-    name: req.body.name,
-    last: req.body.last,
-    age: req.body.age,
-    email: req.body.email,
-    gender: req.body.gender,
-    username: req.body.username,
-    userId: [userNum] + 1,
-  });
-  user
-    .save()
-    .then(() => {
-      //return to homepage after successful registration
-      res.render("home");
-    })
-    .catch((err) => {
-      res.json({ message: err });
+  function add(contatore) {
+    const user = new User({
+      name: req.body.name,
+      last: req.body.last,
+      age: req.body.age,
+      email: req.body.email,
+      gender: req.body.gender,
+      username: req.body.username,
+      userId: contatore + 1,
     });
+    user
+      .save()
+      .then(() => {
+        //return to homepage after successful registration
+        res.render("home");
+      })
+      .catch((err) => {
+        res.json({ message: err });
+      });
+  }
+  //get number of users already registered and increment by 1 to obtain new userId
+  User.countDocuments({}, (err, count) => {
+    add(count);
+  });
 };
 
 //POST HANDLER - randomically generate movie pairs
