@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form method="post" action="/users/<%= user %>/loggedUser/preferences">
+    <form method="post" action="/users/<%= user %>/preferences">
         <p>
         <fieldset>
             <legend>Seleziona una delle due opzioni</legend>
@@ -26,10 +26,12 @@
         </p>
         <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');">
     </form>
+    <p>
     <% if(count===3) { %>
         <a href="http://localhost:5000/home"><input type="button" id="stop" name="stop"
                 value="Termina registrazione"></a>
         <% } %>
+    </p>
 </body>
 
 </html>
