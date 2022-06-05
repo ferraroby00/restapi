@@ -28,8 +28,9 @@
     </form>
     <p>
     <% if(count===3) { %>
-        <a href="http://localhost:5000/home"><input type="button" id="stop" name="stop"
-                value="Termina registrazione"></a>
+        <a href="http://localhost:5000/home">
+            <input type="button" id="stop" name="stop" value="Termina registrazione" onclick="return confirm('Terminare la registrazione?');">
+        </a>
         <% } %>
     </p>
 </body>
