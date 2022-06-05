@@ -8,25 +8,28 @@
 </head>
 
 <body>
-    <fieldset>
-        <legend>Seleziona una delle due opzioni</legend>
-            <form method="post" action="/users/<%= user %>/loggedUser/preferences">
-                <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>">
-                <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>">
-                <input type="radio" id="opz_one" name="opz" value="<%=film_one.movieId%>">
-                <label for="opz_one">
-                    <%= film_one.title %>
-                </label><br>
-                <input type="radio" id="opz_two" name="opz" value="<%=film_two.movieId%>">
-                <label for="opz_two">
-                    <%= film_two.title %>
-                </label>
-                <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');">
-            </form>
-        <% if(count === 3) { %>
-            <a href="http://localhost:5000/home"><input type="button" id="stop" name="stop" value="Termina registrazione"></a>
+    <form method="post" action="/users/<%= user %>/loggedUser/preferences">
+        <p>
+        <fieldset>
+            <legend>Seleziona una delle due opzioni</legend>
+            <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>">
+            <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>">
+            <input type="radio" id="opz_one" name="opz" value="<%=film_one.movieId%>">
+            <label for="opz_one">
+                <%= film_one.title %>
+            </label><br>
+            <input type="radio" id="opz_two" name="opz" value="<%=film_two.movieId%>">
+            <label for="opz_two">
+                <%= film_two.title %>
+            </label><br>
+        </fieldset>
+        </p>
+        <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');">
+    </form>
+    <% if(count===3) { %>
+        <a href="http://localhost:5000/home"><input type="button" id="stop" name="stop"
+                value="Termina registrazione"></a>
         <% } %>
-    </fieldset>
 </body>
 
 </html>
