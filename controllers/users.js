@@ -2,7 +2,8 @@ import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
 
-let counter = 0;
+let counter;
+
 //GET HANDLER - returns all users documents
 export const getUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
@@ -22,7 +23,7 @@ export const getUsers = (req, res) => {
 
 //POST HANDLER - inserts a new user document
 export const createUser = (req, res) => {
-  function add(contatore) {
+  function add(numUser) {
     const user = new User({
       name: req.body.name,
       last: req.body.last,
@@ -30,13 +31,13 @@ export const createUser = (req, res) => {
       email: req.body.email,
       gender: req.body.gender,
       username: req.body.username,
-      userId: contatore + 1,
+      userId: numUser + 1,
     });
     user
       .save()
       .then(() => {
-        //return to homepage after successful registration
-        res.render("home");
+        //return to homepage after successful registration (flag needed to display success message)
+        res.render("home", { flag: true });
       })
       .catch((err) => {
         res.json({ message: err });
