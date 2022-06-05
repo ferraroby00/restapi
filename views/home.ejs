@@ -8,6 +8,7 @@
     <script>
         function showForm() {
             document.getElementById("signin").style.display = "block";
+            document.getElementById("success").style.display = "none";
         }
     </script>
 </head>
@@ -34,9 +35,11 @@
     </form>
     </p>
 
+    <p id="success" style="display: block;">
     <% if(flag === true) { %>
         Utente registrato con successo!
         <% } %>
+    </p>
 </body>
 
 </html>
