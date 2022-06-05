@@ -2,7 +2,9 @@
 <html>
 
 <head>
-    <title>Pagina utente</title>
+    <title>
+        Pagina utente
+    </title>
     <script>
         function showForm() {
             document.getElementById("editForm").style.display = "block";
@@ -11,7 +13,9 @@
 </head>
 
 <body>
-    <h1>Gestione utente</h1>
+    <h1>
+        Gestione utente
+    </h1>
     <p>
         <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
     </p>
@@ -24,9 +28,9 @@
         <input type="button" id="save" name="save" value="Salva">
     </form>
     <p>
-        <form method="get" action="/users/<%= user.username %>/preferences">
-            <input type="submit" value="Vai alle preferenze">
-        </form>
+    <form method="get" action="/users/<%= user.username %>/preferences">
+        <input type="submit" value="Vai alle preferenze">
+    </form>
 </body>
 
 </html>
