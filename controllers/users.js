@@ -168,13 +168,14 @@ export const deleteUser = (req, res) => {
 
 //PATCH BY ID HANDLER - updates a user by username and by specific fields stored in HTTP request body
 export const updateUser = (req, res) => {
+  let success = false;
   const { uname } = req.params;
   const { name, last, age, email, gender } = req.body;
   //checks if every fild is valid and if so applies the update (flag: 2 needed to display success message in home.ejs)
   if (name)
     User.updateOne({ username: uname }, { $set: { name: name } })
       .then(() => {
-        res.render("home", { flag: 2 });
+        success = true;
       })
       .catch((err) => {
         res.json({ message: err });
@@ -182,7 +183,7 @@ export const updateUser = (req, res) => {
   if (last)
     User.updateOne({ username: uname }, { $set: { last: last } })
       .then(() => {
-        res.render("home", { flag: 2 });
+        success = true;
       })
       .catch((err) => {
         res.json({ message: err });
@@ -190,7 +191,7 @@ export const updateUser = (req, res) => {
   if (age)
     User.updateOne({ username: uname }, { $set: { age: age } })
       .then(() => {
-        res.render("home", { flag: 2 });
+        success = true;
       })
       .catch((err) => {
         res.json({ message: err });
@@ -198,7 +199,7 @@ export const updateUser = (req, res) => {
   if (email)
     User.updateOne({ username: uname }, { $set: { email: email } })
       .then(() => {
-        res.render("home", { flag: 2 });
+        success = true;
       })
       .catch((err) => {
         res.json({ message: err });
@@ -206,9 +207,12 @@ export const updateUser = (req, res) => {
   if (gender)
     User.updateOne({ username: uname }, { $set: { gender: gender } })
       .then(() => {
-        res.render("home", { flag: 2 });
+        success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
+  if(success === true) {
+    res.render("home", { flag: 2 });
+  }
 };
