@@ -12,6 +12,12 @@ export const getMovies = (req, res) => {
     });
 };
 
+export const getMovieList = () => {
+  Movie.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
+    return docs;
+  });
+};
+
 //POST HANDLER - inserts a new movie document
 export const insertMovie = (req, res) => {
   const movie = new Movie({

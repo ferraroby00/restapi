@@ -5,8 +5,30 @@ import Movies from "../models/movies.js";
 let counter;
 let matr;
 
-function initMatrix() {
-  matr = Array(9742).fill(Array(9742));
+function initMatrix(found) {
+  function start(mList) {
+    matr = Array(9742).fill(Array(9742));
+    console.log(mList);
+    if (found.preferences.length !== 0) {
+      found.preferences.forEach((e) => {
+        if(e.choice1 === e.user){
+          matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1;
+        }
+        else{
+          matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0;
+        }
+        // console.log(
+        //   mList.indexOf(mList.find((element) => element.movieId === e.choice1))
+        // );
+      });
+    }
+    //console.log(matr);
+    // console.log(mList[5246].movieId);
+  }
+
+  Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
+    start(docs);
+  });
 }
 
 //GET HANDLER - returns all users documents
@@ -108,15 +130,20 @@ export const postPreference = (req, res) => {
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
 
-//GET BY ID HANDLER - returns a user by username
+//GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {
+  function execute(user) {
+    console.log("Utente:" + user);
+    res.locals.user = user;
+    res.locals.title1 = undefined;
+    res.locals.title2 = undefined;
+    initMatrix(user);
+    res.render("loggedUser", { user: user });
+  }
   const { uname } = req.params;
   User.findOne({ username: uname })
     .then(function (found) {
-      res.locals.user = found;
-      res.locals.title1 = undefined;
-      res.locals.title2 = undefined;
-      res.render("loggedUser", { user: found });
+      execute(found);
     })
     .catch((err) => {
       res.json({ message: err });
