@@ -3,6 +3,11 @@ import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
 
 let counter;
+let matr;
+
+function initMatrix() {
+  matr = Array(9742).fill(Array(9742));
+}
 
 //GET HANDLER - returns all users documents
 export const getUsers = (req, res) => {
@@ -71,6 +76,7 @@ export const getPreferences = (req, res) => {
   //query to extract the full list of movieIds
   Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
     //invokes the actual controller
+    console.log(found);
     funzione(found);
   });
 };
