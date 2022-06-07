@@ -6,30 +6,52 @@ let counter;
 
 // Definition of user preference matrix
 let matr;
+// Definition of full movieId list
+let mList;
 
-//Inits user matrix
-function initMatrix(found) {
-  function start(mList) {
-    //Inits a square Matrix [mList.length] x [mList.length]
-    matr = Array(mList.length).fill().map(() => Array(mList.length).fill());
-    console.log(matr);
-    //If users has already registered movie preferences then push scores in matrix
-    if (found.preferences.length !== 0) {
-      found.preferences.forEach((e) => {
-        console.log("Pushed score in: ["+mList.indexOf(mList.find((element) => element.movieId === e.choice1))+"]["+mList.indexOf(mList.find((element) => element.movieId === e.choice2))+"]");
-        //If user preference matches the first option then push 1, if it matches the second one then push 0
-        if (e.choice1 === e.user) { matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1; }
-        else { matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0; }
-      })
-      //console.log(matr);
+// Pushes new registered score based on user preferences
+function pushScore(obj) {
+  let i1 = mList.indexOf(
+    mList.find((element) => element.movieId === obj.choice1)
+  );
+  let i2 = mList.indexOf(
+    mList.find((element) => element.movieId === obj.choice2)
+  );
+
+  // Matrix must be upper triangular \]
+  if (i1 < i2) {
+    //If user preference matches the first option then add 1, if it matches the second one then leave the current score
+    if (obj.choice1 === obj.user) {
+      console.log("Pushed score in: [" + i1 + "][" + i2 + "]");
+      matr[i1][i2] += 1;
+    }
+  } else {
+    if (obj.choice1 === obj.user) {
+      console.log("Pushed score in: [" + i2 + "][" + i1 + "]");
+      matr[i2][i1] += 1;
     }
   }
+}
 
-  // Gets an array that contains the full movieId list
-  Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
-    //Invokes the function to init the user matrix
-    start(docs);
+//Inits user matrix
+async function initMatrix(found) {
+  // Gets the array that contains the full movieId list
+  await Movies.find({}, { movieId: 1, _id: 0 }).then((docs) => {
+    mList = docs;
   });
+
+  //Inits a square Matrix [mList.length] x [mList.length]
+  matr = Array(mList.length)
+    .fill(0)
+    .map(() => Array(mList.length).fill(0));
+  //console.log(matr);
+  //If users has already registered movie preferences then push scores in matrix
+  if (found.preferences.length !== 0) {
+    found.preferences.forEach((e) => {
+      pushScore(e);
+    });
+    //console.log(matr);
+  }
 
   // DEMO TRIAL
   /*function start(mList) {
@@ -55,7 +77,6 @@ function initMatrix(found) {
       { movieId: "2352" },
     ]);
   });*/
-
 }
 
 //GET HANDLER - returns all users documents
@@ -159,12 +180,12 @@ export const postPreference = (req, res) => {
 
 //GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {
-  function execute(user) {
+  async function execute(user) {
     console.log("Utente:" + user);
     res.locals.user = user;
     res.locals.title1 = undefined;
     res.locals.title2 = undefined;
-    initMatrix(user);
+    await initMatrix(user);
     res.render("loggedUser", { user: user });
   }
   const { uname } = req.params;
