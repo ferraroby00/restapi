@@ -4,30 +4,87 @@ import Movies from "../models/movies.js";
 
 let counter;
 let matr;
+let mList;
 
 function initMatrix(found) {
   function start(mList) {
-    matr = Array(9742).fill(Array(9742));
-    console.log(mList);
-    if (found.preferences.length !== 0) {
-      found.preferences.forEach((e) => {
-        if(e.choice1 === e.user){
-          matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1;
-        }
-        else{
-          matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0;
-        }
-        // console.log(
-        //   mList.indexOf(mList.find((element) => element.movieId === e.choice1))
-        // );
-      });
+    matr = Array(8).fill().map(()=>Array(8).fill());
+    console.log(matr);
+    for (let i = 0; i < 4; i++) {
+      console.log(
+        mList.indexOf(
+          mList.find(
+            (element) => element.movieId === found.preferences[i].choice1
+          )
+        )+" --- "+mList.indexOf(
+          mList.find(
+            (element) => element.movieId === found.preferences[i].choice2
+          )
+        )
+      );
+      if (found.preferences[i].choice1 === found.preferences[i].user) {
+        matr[
+          mList.indexOf(
+            mList.find(
+              (element) => element.movieId === found.preferences[i].choice1
+            )
+          )
+        ][
+          mList.indexOf(
+            mList.find(
+              (element) => element.movieId === found.preferences[i].choice2
+            )
+          )
+        ] = 1;
+      } else {
+        matr[
+          mList.indexOf(
+            mList.find(
+              (element) => element.movieId === found.preferences[i].choice1
+            )
+          )
+        ][
+          mList.indexOf(
+            mList.find(
+              (element) => element.movieId === found.preferences[i].choice2
+            )
+          )
+        ] = 0;
+      }
     }
-    //console.log(matr);
-    // console.log(mList[5246].movieId);
+    console.log(matr);
   }
+  // function start(mList) {
+  //   matr = Array(9742).fill(Array(9742));
+  //   if (found.preferences.length !== 0) {
+  //     found.preferences.forEach((e) => {
+  //       if(e.choice1 === e.user){
+  //         matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1;
+  //       }
+  //       else{
+  //         matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0;
+  //       }
+  //       // console.log(
+  //       //   mList.indexOf(mList.find((element) => element.movieId === e.choice1))
+  //       // );
+  //     });
+  //   }
+  //   //console.log(matr);
+  //   // console.log(mList[5246].movieId);
+  // }
 
   Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
-    start(docs);
+    //   start(docs);
+    start([
+      { movieId: "36529" },
+      { movieId: "26409" },
+      { movieId: "12" },
+      { movieId: "3" },
+      { movieId: "2" },
+      { movieId: "2152" },
+      { movieId: "37" },
+      { movieId: "2352" },
+    ]);
   });
 }
 
@@ -212,7 +269,7 @@ export const updateUser = (req, res) => {
       .catch((err) => {
         res.json({ message: err });
       });
-  if(success === true) {
+  if (success === true) {
     res.render("home", { flag: 2 });
   }
 };
