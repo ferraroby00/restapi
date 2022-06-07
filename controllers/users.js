@@ -161,19 +161,21 @@ export const postPreference = (req, res) => {
   };
   console.log("Utente che sta esprimendo preferenza: " + req.params.uname);
   //finding user based on the reference passed by URL
-  User.findOne({ username: req.params.uname }).then((found) => {
-    console.log(found);
-    //pushing new preference object in user document
-    found.preferences.push(obj);
-    console.log(found.preferences);
-    //updating the user overriding the array
-    User.updateOne(
-      { username: req.params.uname },
-      { $set: { preferences: found.preferences } }
-    ).then(() => {
+  User.findOne({ username: req.params.uname })
+    .then((found) => {
+      console.log(found);
+      //pushing new preference object in user document
+      found.preferences.push(obj);
+      console.log(found.preferences);
+      //updating the user overriding the array
+      return User.updateOne(
+        { username: req.params.uname },
+        { $set: { preferences: found.preferences } }
+      );
+    })
+    .then(() => {
       counter = counter + 1;
     });
-  });
   //redirection to the preference view
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
