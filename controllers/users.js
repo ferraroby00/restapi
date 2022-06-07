@@ -3,78 +3,47 @@ import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
 
 let counter;
-let matr;
-let mList;
 
+// Definition of user preference matrix
+let matr;
+
+//Inits user matrix
 function initMatrix(found) {
   function start(mList) {
-    matr = Array(8).fill().map(()=>Array(8).fill());
+    //Inits a square Matrix [mList.length] x [mList.length]
+    matr = Array(mList.length).fill().map(() => Array(mList.length).fill());
+    console.log(matr);
+    //If users has already registered movie preferences then push scores in matrix
+    if (found.preferences.length !== 0) {
+      found.preferences.forEach((e) => {
+        console.log("Pushed score in: ["+mList.indexOf(mList.find((element) => element.movieId === e.choice1))+"]["+mList.indexOf(mList.find((element) => element.movieId === e.choice2))+"]");
+        //If user preference matches the first option then push 1, if it matches the second one then push 0
+        if (e.choice1 === e.user) { matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1; }
+        else { matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0; }
+      })
+      //console.log(matr);
+    }
+  }
+
+  // Gets an array that contains the full movieId list
+  Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
+    //Invokes the function to init the user matrix
+    start(docs);
+  });
+
+  // DEMO TRIAL
+  /*function start(mList) {
+    matr = Array(8).fill().map(() => Array(8).fill());
     console.log(matr);
     for (let i = 0; i < 4; i++) {
-      console.log(
-        mList.indexOf(
-          mList.find(
-            (element) => element.movieId === found.preferences[i].choice1
-          )
-        )+" --- "+mList.indexOf(
-          mList.find(
-            (element) => element.movieId === found.preferences[i].choice2
-          )
-        )
-      );
-      if (found.preferences[i].choice1 === found.preferences[i].user) {
-        matr[
-          mList.indexOf(
-            mList.find(
-              (element) => element.movieId === found.preferences[i].choice1
-            )
-          )
-        ][
-          mList.indexOf(
-            mList.find(
-              (element) => element.movieId === found.preferences[i].choice2
-            )
-          )
-        ] = 1;
-      } else {
-        matr[
-          mList.indexOf(
-            mList.find(
-              (element) => element.movieId === found.preferences[i].choice1
-            )
-          )
-        ][
-          mList.indexOf(
-            mList.find(
-              (element) => element.movieId === found.preferences[i].choice2
-            )
-          )
-        ] = 0;
-      }
+      console.log(mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1)) + " --- " + mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2)));
+      if (found.preferences[i].choice1 === found.preferences[i].user) { matr[mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1))][mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2))] = 1; }
+      else { matr[mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1))][mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2))] = 0; }
     }
     console.log(matr);
   }
-  // function start(mList) {
-  //   matr = Array(9742).fill(Array(9742));
-  //   if (found.preferences.length !== 0) {
-  //     found.preferences.forEach((e) => {
-  //       if(e.choice1 === e.user){
-  //         matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 1;
-  //       }
-  //       else{
-  //         matr[mList.indexOf(mList.find((element) => element.movieId === e.choice1))][mList.indexOf(mList.find((element) => element.movieId === e.choice2))] = 0;
-  //       }
-  //       // console.log(
-  //       //   mList.indexOf(mList.find((element) => element.movieId === e.choice1))
-  //       // );
-  //     });
-  //   }
-  //   //console.log(matr);
-  //   // console.log(mList[5246].movieId);
-  // }
 
   Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
-    //   start(docs);
     start([
       { movieId: "36529" },
       { movieId: "26409" },
@@ -85,7 +54,8 @@ function initMatrix(found) {
       { movieId: "37" },
       { movieId: "2352" },
     ]);
-  });
+  });*/
+
 }
 
 //GET HANDLER - returns all users documents
