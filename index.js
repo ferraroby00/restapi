@@ -35,15 +35,12 @@ app.get("/home", (req, res) => {
 mongoose.connect(
   "mongodb+srv://restapi:tesi_restAPI@thesis.mvjviod.mongodb.net/ufr"
 );
-const con = mongoose.connection;
-con.on("open", () => {
+mongoose.connection.on("open", () => {
   console.log("Connesso al database");
 });
-con.on("error", () => {
+mongoose.connection.on("error", () => {
   console.log("Errore nella connessione al database");
 });
 
 //server listening on port PORT
-app.listen(PORT, () =>
-  console.log(`Server in ascolto alla porta: http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server in ascolto alla porta ${PORT}`));
