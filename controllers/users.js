@@ -17,19 +17,13 @@ function pushScore(obj) {
   let i2 = mList.indexOf(
     mList.find((element) => element.movieId === obj.choice2)
   );
-
-  // Matrix must be upper triangular \]
-  if (i1 < i2) {
-    //If user preference matches the first option then add 1, if it matches the second one then leave the current score
-    if (obj.choice1 === obj.user) {
-      console.log("Pushed score in: [" + i1 + "][" + i2 + "]");
-      matr[i1][i2] += 1;
-    }
+  console.log("Pushed score in: [" + i1 + "][" + i2 + "]");
+  if (obj.choice1 === obj.user) {
+    //If an the first option (row) is preferable to the second one (column), put 1 at the intersection
+    matr[i1][i2] += 1;
   } else {
-    if (obj.choice1 === obj.user) {
-      console.log("Pushed score in: [" + i2 + "][" + i1 + "]");
-      matr[i2][i1] += 1;
-    }
+    //The opposite happens if the second option is preferable to the first one
+    matr[i2][i1] += 1;
   }
 }
 
@@ -139,6 +133,7 @@ export const getPreferences = (req, res) => {
       res.locals.film_two = found;
     });
     res.locals.count = counter;
+    console.log(counter);
     console.log(res.locals.count);
     res.locals.user = req.params.uname;
     res.render("preferences");
@@ -146,7 +141,7 @@ export const getPreferences = (req, res) => {
   //query to extract the full list of movieIds
   Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
     //invokes the actual controller
-    console.log(found);
+    //console.log(found);
     funzione(found);
   });
 };
@@ -163,7 +158,6 @@ export const postPreference = (req, res) => {
   //finding user based on the reference passed by URL
   User.findOne({ username: req.params.uname })
     .then((found) => {
-      console.log(found);
       //pushing new preference object in user document
       found.preferences.push(obj);
       console.log(found.preferences);
@@ -175,8 +169,9 @@ export const postPreference = (req, res) => {
     })
     .then(() => {
       counter = counter + 1;
+      pushScore(obj);
     });
-  //redirection to the preference view
+  //redirection to the getPreference
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
 

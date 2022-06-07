@@ -28,7 +28,7 @@
         <input type="submit" id="save" name="save" value="Salva">
     </form>
     <p>
-    <form method="post" action="/users/<%= user.username %>/preferences">
+    <form method="get" action="/users/<%= user.username %>/preferences">
         <input type="submit" value="Vai alle preferenze">
     </form>
 </body>
