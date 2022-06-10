@@ -3,74 +3,61 @@ import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
 
 let counter;
+let popularity;
 
-// Definition of user preference matrix
-let matr;
-// Definition of full movieId list
-let mList;
+//Inits  matrix
+async function initContext(found) {
+  let mList,
+    max,
+    toPush = {};
 
-// Pushes new registered score based on user preferences
-function pushScore(obj) {
-  let i1 = mList.indexOf(
-    mList.find((element) => element.movieId === obj.choice1)
-  );
-  let i2 = mList.indexOf(
-    mList.find((element) => element.movieId === obj.choice2)
-  );
-  console.log("Pushed score in: [" + i1 + "][" + i2 + "]");
-  if (obj.choice1 === obj.user) {
-    //If an the first option (row) is preferable to the second one (column), put 1 at the intersection
-    matr[i1][i2] += 1;
-  } else {
-    //The opposite happens if the second option is preferable to the first one
-    matr[i2][i1] += 1;
-  }
-}
-
-//Inits user matrix
-async function initMatrix(found) {
-  // Gets the array that contains the full movieId list
-  await Movies.find({}, { movieId: 1, _id: 0 }).then((docs) => {
-    mList = docs;
+  await Rating.aggregate([
+    { $group: { _id: "$movieId", count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 1 },
+  ]).then((result) => {
+    console.log(result);
+    max = result[0].count;
   });
 
-  //Inits a square Matrix [mList.length] x [mList.length]
-  matr = Array(mList.length)
-    .fill(0)
-    .map(() => Array(mList.length).fill(0));
-  //console.log(matr);
-  //If users has already registered movie preferences then push scores in matrix
-  if (found.preferences.length !== 0) {
-    found.preferences.forEach((e) => {
-      pushScore(e);
-    });
-    //console.log(matr);
-  }
+  console.log("Massimo: " + max);
 
-  // DEMO TRIAL
-  /*function start(mList) {
-    matr = Array(8).fill().map(() => Array(8).fill());
-    console.log(matr);
-    for (let i = 0; i < 4; i++) {
-      console.log(mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1)) + " --- " + mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2)));
-      if (found.preferences[i].choice1 === found.preferences[i].user) { matr[mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1))][mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2))] = 1; }
-      else { matr[mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice1))][mList.indexOf(mList.find((element) => element.movieId === found.preferences[i].choice2))] = 0; }
+  await Movies.find({}, { movieId: 1, _id: 0 }).then((list) => (mList = list));
+
+  console.log(mList);
+  popularity = [];
+  console.log("Popularity-first: " + popularity);
+  //OK
+
+  function funzione(rec, el) {
+    if (rec[0]) {
+      toPush["movieId"] = el.movieId;
+      toPush["popIndex"] = parseFloat((rec[0].ratings / max).toFixed(3));
+      //console.log(toPush);
+      if (toPush.popIndex > 0.05) {
+        popularity.push(toPush);
+      }
     }
-    console.log(matr);
   }
 
-  Movies.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
-    start([
-      { movieId: "36529" },
-      { movieId: "26409" },
-      { movieId: "12" },
-      { movieId: "3" },
-      { movieId: "2" },
-      { movieId: "2152" },
-      { movieId: "37" },
-      { movieId: "2352" },
-    ]);
-  });*/
+  mList.forEach(async function (el) {
+    await Rating.aggregate(
+      [
+        {
+          $match: {
+            movieId: el.movieId,
+          },
+        },
+        {
+          $count: "ratings",
+        },
+      ],
+      (error, record) => {
+        funzione(record, el);
+      }
+    );
+  });
+  console.log(popularity);
 }
 
 //GET HANDLER - returns all users documents
@@ -177,12 +164,12 @@ export const postPreference = (req, res) => {
 
 //GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {
-  async function execute(user) {
+  function execute(user) {
     console.log("Utente:" + user);
     res.locals.user = user;
     res.locals.title1 = undefined;
     res.locals.title2 = undefined;
-    await initMatrix(user);
+    initContext(user);
     res.render("loggedUser", { user: user });
   }
   const { uname } = req.params;

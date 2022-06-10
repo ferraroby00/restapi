@@ -1,17 +1,20 @@
-import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 const RatingSchema = mongoose.Schema({
-  ratedBy: {
-    type: ObjectId,
+  userId: {
+    type: String,
     required: true,
   },
-  filmId: {
-    type: ObjectId,
+  movieId: {
+    type: String,
     required: true,
   },
   rating: {
-    type: Number,
+    type: String,
+    required: true,
+  },
+  timestamp: {
+    type: String,
     required: true,
   },
 });
