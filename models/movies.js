@@ -13,6 +13,9 @@ const MovieSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  popularity_index: {
+    type: Number,
+  },
 });
 
 export default mongoose.model("Movies", MovieSchema);

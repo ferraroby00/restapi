@@ -29,35 +29,35 @@ async function initContext(found) {
   console.log("Popularity-first: " + popularity);
   //OK
 
-  function funzione(rec, el) {
-    if (rec[0]) {
-      toPush["movieId"] = el.movieId;
-      toPush["popIndex"] = parseFloat((rec[0].ratings / max).toFixed(3));
-      //console.log(toPush);
-      if (toPush.popIndex > 0.05) {
-        popularity.push(toPush);
-      }
-    }
-  }
-
-  mList.forEach(async function (el) {
-    await Rating.aggregate(
-      [
-        {
-          $match: {
-            movieId: el.movieId,
-          },
+  await mList.forEach(function (el) {
+    Rating.aggregate([
+      {
+        $match: {
+          movieId: el.movieId,
         },
-        {
-          $count: "ratings",
-        },
-      ],
-      (error, record) => {
-        funzione(record, el);
-      }
-    );
+      },
+      {
+        $count: "ratings",
+      },
+    ])
+      .exec()
+      .then((value) => {
+        if (value[0]) {
+          return Movies.updateOne(
+            { movieId: el.movieId },
+            {
+              $set: {
+                popularity_index: parseFloat(
+                  (value[0].ratings / max).toFixed(3)
+                ),
+              },
+            }
+          ).exec();
+        }
+      })
+      .then(() => console.log(`Popularity for ${el.movieId} updated`));
   });
-  console.log(popularity);
+  await initVector();
 }
 
 //GET HANDLER - returns all users documents
@@ -162,14 +162,25 @@ export const postPreference = (req, res) => {
   res.redirect("/users/" + req.params.uname + "/preferences");
 };
 
+async function initVector() {
+  let result;
+  await Movies.find({}, { movieId: 1, popularity_index: 1, _id: 0 }).then(
+    (list) => (result = list)
+  );
+  //console.log(result);
+  popularity = result.filter((element) => element.popularity_index > 0.1);
+  console.log(popularity);
+}
+
 //GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {
-  function execute(user) {
+  async function execute(user) {
     console.log("Utente:" + user);
     res.locals.user = user;
     res.locals.title1 = undefined;
     res.locals.title2 = undefined;
-    initContext(user);
+    await initVector();
+    //console.log(popularity);
     res.render("loggedUser", { user: user });
   }
   const { uname } = req.params;
