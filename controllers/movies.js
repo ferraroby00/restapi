@@ -12,11 +12,23 @@ export const getMovies = (req, res) => {
     });
 };
 
-export const getMovieList = () => {
-  Movie.find({}, { movieId: 1, _id: 0 }, (err, docs) => {
-    return docs;
-  });
-};
+export async function getMovieList(flag) {
+  let mList;
+  if (flag === 1) {
+    await Movie.find({}, { movieId: 1, popularity_index: 1, _id: 0 }).then(
+      (docs) => {
+        mList = docs;
+      }
+    );
+  } else {
+    await Movie.find({}, { movieId: 1, _id: 0 })
+      .then((docs) => {
+        mList = docs;
+      })
+      .catch((err) => (mList = { error: err }));
+  }
+  return mList;
+}
 
 //POST HANDLER - inserts a new movie document
 export const insertMovie = (req, res) => {

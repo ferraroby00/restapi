@@ -1,12 +1,12 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
 import Movies from "../models/movies.js";
-
+//import {getMovieList} from "../controllers/movies.js";
+import * as movieController from "../controllers/movies.js";
 let counter;
 let popularity;
 
-//Inits  matrix
-async function initContext(found) {
+/*async function initContext(found) {
   let mList,
     max,
     toPush = {};
@@ -59,16 +59,18 @@ async function initContext(found) {
   });
   await initVector();
 }
+*/
 
 //GET HANDLER - returns all users documents
 export const getUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
   if (req.query.uname) {
+    //Inits selection counter
     counter = 0;
     res.redirect("/users/" + req.query.uname);
   } else {
     User.find({})
-      .then(function (users) {
+      .then((users) => {
         res.send(users);
       })
       .catch((err) => {
@@ -77,65 +79,66 @@ export const getUsers = (req, res) => {
   }
 };
 
-//POST HANDLER - inserts a new user document
+//USER POST HANDLER - inserts a new user document
 export const createUser = (req, res) => {
-  function add(numUser) {
-    const user = new User({
-      name: req.body.name,
-      last: req.body.last,
-      age: req.body.age,
-      email: req.body.email,
-      gender: req.body.gender,
-      username: req.body.username,
-      userId: numUser + 1,
-    });
-    user
-      .save()
-      .then(() => {
-        //returns to homepage after successful registration (flag: 1 needed to display success message in home.ejs)
-        res.render("home", { flag: 1 });
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });
-  }
-
+  let user;
+  let numUser;
   //gets number of users already registered and increment by 1 to obtain new userId
-  User.countDocuments({}, (err, count) => {
-    add(count);
-  });
+  User.countDocuments({})
+    .then((count) => {
+      numUser = count;
+    })
+    .then(() => {
+      //creates the user object to save into MongoDB
+      user = new User({
+        name: req.body.name,
+        last: req.body.last,
+        age: req.body.age,
+        email: req.body.email,
+        gender: req.body.gender,
+        username: req.body.username,
+        userId: numUser + 1,
+      });
+    })
+    .then(() => {
+      //Saves user in MongoDB
+      user.save();
+    })
+    .then(() => {
+      console.log("Success!! - Nuovo utente inserito");
+      //returns to homepage after successful registration (flag: 1 needed to display success message in home.ejs)
+      res.render("home", { flag: 1 });
+    })
+    .catch((err) => {
+      res.json({ message: err });
+    });
 };
 
-//POST HANDLER - randomically generate movie pairs
-export const getPreferences = (req, res) => {
-  //async function to exec the query: the controller stops until each query gets data
-  async function funzione(trovato) {
-    //generating random indexes for the movieIds array
-    const rand1 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
-    const rand2 = "" + Math.floor(Math.random() * (trovato.length - 0) + 0);
-    await Movies.findOne({ movieId: trovato[rand1].movieId }).then((found) => {
-      res.locals.film_one = found;
-    });
-    await Movies.findOne({ movieId: trovato[rand2].movieId }).then((found) => {
-      res.locals.film_two = found;
-    });
-    res.locals.count = counter;
-    console.log(counter);
-    console.log(res.locals.count);
-    res.locals.user = req.params.uname;
-    res.render("preferences");
-  }
-  //query to extract the full list of movieIds
-  Movies.find({}, { movieId: 1, _id: 0 }).then((found) => {
-    //invokes the actual controller
-    //console.log(found);
-    funzione(found);
+//PREFERENCES POST HANDLER - randomically generate movie pairs based on popularity array
+export const getPreferences = async (req, res) => {
+  //generating random indexes for the movieIds most popular array (popularity)
+  const rand1 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
+  const rand2 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
+  //Queries to get two random films to choose
+  await Movies.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
+    res.locals.film_one = found;
   });
+  await Movies.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
+    res.locals.film_two = found;
+  });
+  //Saves the preference counter into EJS template
+  res.locals.count = counter;
+  console.log("Contatore preferenze: " + res.locals.count);
+  //Saves username into EJS template
+  res.locals.user = req.params.uname;
+
+  res.render("preferences");
 };
 
-//PREFERENCE POST HANDLER
+//PREFERENCE POST HANDLER - Pushes preference choice into user document in MongoDB
 export const postPreference = (req, res) => {
   //creating the object to be stored in user
+  let aux;
   let obj = {
     choice1: req.body.movie_one,
     choice2: req.body.movie_two,
@@ -147,46 +150,46 @@ export const postPreference = (req, res) => {
     .then((found) => {
       //pushing new preference object in user document
       found.preferences.push(obj);
-      console.log(found.preferences);
-      //updating the user overriding the array
-      return User.updateOne(
-        { username: req.params.uname },
-        { $set: { preferences: found.preferences } }
-      );
+      aux = found;
     })
     .then(() => {
+      //updating the user overwriting the array
+      return User.updateOne(
+        { username: req.params.uname },
+        { $set: { preferences: aux.preferences } }
+      ).exec();
+    })
+    .then(() => {
+      //Updates the counter
       counter = counter + 1;
-      pushScore(obj);
-    });
-  //redirection to the getPreference
-  res.redirect("/users/" + req.params.uname + "/preferences");
+      //redirection to the getPreference
+      res.redirect("/users/" + req.params.uname + "/preferences");
+    })
+    .catch((err) => {
+      res.json(err);
+    })
+  
 };
 
+//Values popularity vector
 async function initVector() {
-  let result;
-  await Movies.find({}, { movieId: 1, popularity_index: 1, _id: 0 }).then(
-    (list) => (result = list)
-  );
-  //console.log(result);
+  let result = await movieController.getMovieList(1);
+  //Filters result array based on a specific value
   popularity = result.filter((element) => element.popularity_index > 0.1);
-  console.log(popularity);
+  //console.log(popularity);
 }
 
 //GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {
-  async function execute(user) {
-    console.log("Utente:" + user);
-    res.locals.user = user;
-    res.locals.title1 = undefined;
-    res.locals.title2 = undefined;
-    await initVector();
-    //console.log(popularity);
-    res.render("loggedUser", { user: user });
-  }
   const { uname } = req.params;
   User.findOne({ username: uname })
-    .then(function (found) {
-      execute(found);
+    .then(async(user) =>{
+      res.locals.user = user;
+      res.locals.title1 = undefined;
+      res.locals.title2 = undefined;
+      await initVector();
+      console.log(popularity);
+      res.render("loggedUser", { user: user });
     })
     .catch((err) => {
       res.json({ message: err });
