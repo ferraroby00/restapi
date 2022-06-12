@@ -40,7 +40,7 @@
     </p>
 
     <p>
-    <form method="get" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
+    <form method="post" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
         <input type="submit" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione di <%= user.username %> ?');">
     </form>
     </p>

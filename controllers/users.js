@@ -1,8 +1,9 @@
 import User from "../models/user.js";
 import Rating from "../models/rating.js";
-import Movies from "../models/movies.js";
-//import {getMovieList} from "../controllers/movies.js";
+import Movies from "../models/movie.js";
 import * as movieController from "../controllers/movies.js";
+import Link from "../models/link.js";
+import fetch from "node-fetch";
 let counter;
 let popularity;
 
@@ -126,6 +127,19 @@ export const getPreferences = async (req, res) => {
   await Movies.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
     res.locals.film_two = found;
   });
+  /*await Link.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
+    res.locals.imdb_one = found.imdbId;
+  });
+  await Link.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
+    res.locals.imdb_two = found.imdbId;
+  });*/
+  /*await fetch(`https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt${res.locals.imdb_one}`).then((response) => {
+    console.log(response.status);
+    console.log(response.ok)
+    response.json();
+  }).then((data) => {
+    console.log(data);
+  })*/
   //Saves the preference counter into EJS template
   res.locals.count = counter;
   console.log("Contatore preferenze: " + res.locals.count);
@@ -197,10 +211,10 @@ export const getUser = (req, res) => {
 
 //DELETE BY ID HANDLER - deletes a user by ID
 export const deleteUser = (req, res) => {
-  const { uname } = req.params;
-  User.deleteOne({ username: uname })
+  User.deleteOne({ username: req.params.uname })
     .then(() => {
-      res.send(`${username} eliminato`);
+      console.log(`${username} eliminato`);
+      res.redirect("/home");
     })
     .catch((err) => {
       res.json({ message: err });
@@ -212,51 +226,56 @@ export const deleteUser = (req, res) => {
 };
 
 //PATCH BY ID HANDLER - updates a user by username and by specific fields stored in HTTP request body
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
   let success = false;
   const { uname } = req.params;
   const { name, last, age, email, gender } = req.body;
-  //checks if every fild is valid and if so applies the update (flag: 2 needed to display success message in home.ejs)
-  if (name)
-    User.updateOne({ username: uname }, { $set: { name: name } })
+  //checks if every field is valid and if so applies the update (flag: 2 needed to display success message in home.ejs)
+  if (name) {
+    await User.updateOne({ username: uname }, { $set: { name: name } })
       .then(() => {
         success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
-  if (last)
-    User.updateOne({ username: uname }, { $set: { last: last } })
+  }
+  if (last) {
+    await User.updateOne({ username: uname }, { $set: { last: last } })
       .then(() => {
         success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
-  if (age)
-    User.updateOne({ username: uname }, { $set: { age: age } })
+  }
+  if (age) {
+    await User.updateOne({ username: uname }, { $set: { age: age } })
       .then(() => {
         success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
-  if (email)
-    User.updateOne({ username: uname }, { $set: { email: email } })
+  }
+  if (email) {
+    await User.updateOne({ username: uname }, { $set: { email: email } })
       .then(() => {
         success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
-  if (gender)
-    User.updateOne({ username: uname }, { $set: { gender: gender } })
+  }
+  if (gender) {
+    await User.updateOne({ username: uname }, { $set: { gender: gender } })
       .then(() => {
         success = true;
       })
       .catch((err) => {
         res.json({ message: err });
       });
+  }
   if (success === true) {
     res.render("home", { flag: 2 });
   }

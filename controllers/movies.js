@@ -1,10 +1,10 @@
-import Movie from "../models/movies.js";
+import Movie from "../models/movie.js";
 import Rating from "../models/rating.js";
 
 //GET HANDLER - returns all movies documents
 export const getMovies = (req, res) => {
   Movie.find({})
-    .then(function (films) {
+    .then((films) => {
       res.send(films);
     })
     .catch((err) => {
@@ -12,6 +12,7 @@ export const getMovies = (req, res) => {
     });
 };
 
+//Function that gets movies array
 export async function getMovieList(flag) {
   let mList;
   if (flag === 1) {
@@ -37,7 +38,7 @@ export const insertMovie = (req, res) => {
     title: req.body.title,
     genres: req.body.genres,
   });
-  movies
+  movie
     .save()
     .then((data) => {
       res.json(data);
@@ -51,7 +52,7 @@ export const insertMovie = (req, res) => {
 export const getMovie = (req, res) => {
   const { id } = req.params;
   Movie.find({ movieId: id })
-    .then(function (found) {
+    .then((found) => {
       res.send(found);
     })
     .catch((err) => {
@@ -79,7 +80,7 @@ export const deleteMovie = (req, res) => {
 //PATCH BY ID HANDLER - updates a movie by Id and by specific fields stored in HTTP request body
 export const updateMovie = (req, res) => {
   const { id } = req.params;
-  const { title, genres } = req.body;
+  const { title, genres, popularity_index } = req.body;
 
   if (title)
     Movie.updateOne({ movieId: id }, { $set: { title: title } })
@@ -97,4 +98,16 @@ export const updateMovie = (req, res) => {
       .catch((err) => {
         res.json({ message: err });
       });
+  if (popularity_index) {
+    Movie.updateOne(
+      { movieId: id },
+      { $set: { popularity_index: popularity_index } }
+    )
+      .then((updated) => {
+        res.send(`Film updated successfully`);
+      })
+      .catch((err) => {
+        res.json({ message: err });
+      });
+  }
 };

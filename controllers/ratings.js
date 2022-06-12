@@ -39,8 +39,8 @@ export const getAll = (req, res) => {
 //POST HANDLER - inserts a new rating document
 export const insertRating = (req, res) => {
   const rating = new Rating({
-    ratedBy: mongoose.Types.ObjectId(req.body.ratedBy),
-    filmId: mongoose.Types.ObjectId(req.body.filmId),
+    userId: req.body.userId,
+    movieId: req.body.movieId,
     rating: req.body.rating,
   });
   rating
