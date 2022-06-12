@@ -8,15 +8,19 @@ import ratingRoutes from "./routes/ratings.js";
 const app = express();
 const PORT = 5000;
 
-app.set("view engine", "ejs");
-
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 app.use("/movies", movieRoutes);
+
 app.use("/users", userRoutes);
+
 app.use("/ratings", ratingRoutes);
+
+app.set("view engine", "ejs");
 
 //homepage
 app.get("/home", (req, res) => {
