@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.use(
   methodOverride("_method", {
-    methods: ["GET", "POST"],
+    methods: ["POST", "GET"],
   })
 );
 

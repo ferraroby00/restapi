@@ -167,8 +167,7 @@ export const postPreference = (req, res) => {
     })
     .catch((err) => {
       res.json(err);
-    })
-  
+    });
 };
 
 //Values popularity vector
@@ -183,7 +182,7 @@ async function initVector() {
 export const getUser = (req, res) => {
   const { uname } = req.params;
   User.findOne({ username: uname })
-    .then(async(user) =>{
+    .then(async (user) => {
       res.locals.user = user;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
