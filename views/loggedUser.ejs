@@ -18,31 +18,38 @@
     <h1>
         Gestione utente
     </h1>
+
     <p>
         <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
     </p>
+
+    <p>
     <form method="post" action="/users/<%= user.username %>?_method=PUT" id="editForm" style="display: none">
-        Nome: <input type="text" name="name" placeholder="<%= user.name %>">
-        Cognome: <input type="text" name="last" placeholder="<%= user.last %>">
-        Età: <input type="number" min="1" max="110" name="age" placeholder="<%= user.age %>">
-        Genere: <%= user.gender %>
-        <select id="gender" name="gender">
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-        </select>
-        E-mail: <input type="email" name="email" placeholder="<%= user.email %>">
+        Nome:&nbsp<input type="text" name="name" placeholder="<%= user.name %>">
+        Cognome:&nbsp<input type="text" name="last" placeholder="<%= user.last %>">
+        Età:&nbsp<input type="number" min="1" max="110" name="age" placeholder="<%= user.age %>">
+        Genere:&nbsp<%= user.gender %>
+            <select id="gender" name="gender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+        E-mail:&nbsp<input type="email" name="email" placeholder="<%= user.email %>">
         <input type="submit" id="save" name="save" value="Salva">
     </form>
-    <p>
-        <form method="get" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
-            <input type="submit" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione <%= user.username %> ?');">
-        </form>
     </p>
+
+    <p>
+    <form method="get" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
+        <input type="submit" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione di <%= user.username %> ?');">
+    </form>
+    </p>
+
     <p>
     <form method="get" action="/users/<%= user.username %>/preferences">
         <input type="submit" value="Vai alle preferenze">
     </form>
+    </p>
 </body>
 
 </html>
