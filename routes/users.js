@@ -12,8 +12,8 @@ import {
 
 const router = express.Router();
 
-router.use(methodOverride('patch', {
-  methods: ["POST"]
+router.use(methodOverride('_method', {
+  methods: ["GET", "POST"]
 }));
 
 //get all users
@@ -35,6 +35,6 @@ router.post("/:uname/preferences", postPreference);
 router.delete("/:uname", deleteUser);
 
 //update user by Id
-router.patch("/:uname", updateUser);
+router.put("/:uname", updateUser);
 
 export default router;

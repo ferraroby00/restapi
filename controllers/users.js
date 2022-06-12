@@ -207,9 +207,9 @@ export const deleteUser = (req, res) => {
       res.json({ message: err });
     });
   //deletes ratings associated to the deleted user
-  Rating.deleteMany({ ratedBy: id }).catch((err) => {
-    res.json({ message: err });
-  });
+  // Rating.deleteMany({ ratedBy: id }).catch((err) => {
+  //   res.json({ message: err });
+  // });
 };
 
 //PATCH BY ID HANDLER - updates a user by username and by specific fields stored in HTTP request body
