@@ -78,11 +78,11 @@ export const deleteMovie = (req, res) => {
 };
 
 //PATCH BY ID HANDLER - updates a movie by Id and by specific fields stored in HTTP request body
-export const updateMovie = (req, res) => {
+export const updateMovie = async(req, res) => {
   const { id } = req.params;
-  const { title, genres, popularity_index } = req.body;
+  const { title, genres } = req.body;
 
-  if (title)
+  /*if (title)
     Movie.updateOne({ movieId: id }, { $set: { title: title } })
       .then((updated) => {
         res.send(`Film updated successfully`);
@@ -97,9 +97,22 @@ export const updateMovie = (req, res) => {
       })
       .catch((err) => {
         res.json({ message: err });
-      });
-  if (popularity_index) {
-    Movie.updateOne(
+      });*/
+  if (res.locals.max) {
+    await Rating.aggregate([
+      {
+        $match: {
+          movieId: el.movieId,
+        },
+      },
+      {
+        $count: "ratings",
+      },
+    ]).then((value) => {
+      console.log("Stampa:"+value);
+      res.end();
+    });
+    /*Movie.updateOne(
       { movieId: id },
       { $set: { popularity_index: popularity_index } }
     )
@@ -108,6 +121,6 @@ export const updateMovie = (req, res) => {
       })
       .catch((err) => {
         res.json({ message: err });
-      });
+      });*/
   }
 };

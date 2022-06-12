@@ -1,5 +1,6 @@
 import Rating from "../models/rating.js";
 import mongoose from "mongoose";
+import { updateMovie } from "./movies.js";
 
 //GET HANDLER - returns all movies documents
 export const getAll = (req, res) => {
@@ -38,6 +39,15 @@ export const getAll = (req, res) => {
 
 //POST HANDLER - inserts a new rating document
 export const insertRating = (req, res) => {
+  //let max;
+  Rating.aggregate([
+    { $group: { _id: "$movieId", count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 1 },
+  ]).then((result) => {
+    console.log(result);
+    res.locals.max = result[0].count;
+  });
   const rating = new Rating({
     userId: req.body.userId,
     movieId: req.body.movieId,
@@ -45,8 +55,8 @@ export const insertRating = (req, res) => {
   });
   rating
     .save()
-    .then((data) => {
-      res.json(data);
+    .then(() => {
+      updateMovie(req,res);
     })
     .catch((err) => {
       res.json({ message: err });
