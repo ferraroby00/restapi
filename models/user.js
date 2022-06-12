@@ -3,36 +3,36 @@ import mongoose from "mongoose";
 const UserSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   last: {
     type: String,
-    required: true
+    required: true,
   },
   age: {
     type: Number,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   gender: {
     type: String,
-    required: true
+    required: true,
   },
   userId: {
     type: String,
-    required: true
+    required: true,
   },
   username: {
     type: String,
-    required: true
+    required: true,
   },
   preferences: {
     type: Array,
-    default: []
-  }
+    default: [],
+  },
 });
 
 export default mongoose.model("Users", UserSchema);

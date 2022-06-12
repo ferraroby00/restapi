@@ -12,11 +12,9 @@ import {
 
 const router = express.Router();
 
-router.use(
-  methodOverride("_method", {
-    methods: ["GET", "POST"],
-  })
-);
+router.use(methodOverride('_method', {
+  methods: ["GET", "POST"]
+}));
 
 //get all users
 router.get("/", getUsers);
