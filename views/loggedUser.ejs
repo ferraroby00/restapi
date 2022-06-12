@@ -18,9 +18,9 @@
     <h1>
         Gestione utente
     </h1>
-    
     <p>
-    <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
+        <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
+    </p>
     <form method="post" action="/users/<%= user.username %>?_method=PUT" id="editForm" style="display: none">
         Nome: <%= user.name %>&nbsp|&nbsp<input type="text" name="name">;
         Cognome: <%= user.last %>&nbsp|&nbsp<input type="text" name="last">;
@@ -29,19 +29,15 @@
         Genere: <%= user.gender %>&nbsp|&nbsp<input type="text" name="gender">.
         <input type="submit" id="save" name="save" value="Salva">
     </form>
-    </p>
-
     <p>
-    <form method="get" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
-        <input type="submit" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione di <%= user.username %> ?');">
-    </form>
+        <form method="get" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
+            <input type="submit" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione <%= user.username %> ?');">
+        </form>
     </p>
-
     <p>
     <form method="get" action="/users/<%= user.username %>/preferences">
         <input type="submit" value="Vai alle preferenze">
     </form>
-    </p>
 </body>
 
 </html>
