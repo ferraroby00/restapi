@@ -3,19 +3,19 @@ import mongoose from "mongoose";
 const MovieSchema = mongoose.Schema({
   movieId: {
     type: String,
-    required: true,
+    required: true
   },
   title: {
     type: String,
-    required: true,
+    required: true
   },
   genres: {
     type: String,
-    required: true,
+    required: true
   },
   popularity_index: {
-    type: Number,
-  },
+    type: Number
+  }
 });
 
 export default mongoose.model("Movies", MovieSchema);
