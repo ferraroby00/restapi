@@ -22,11 +22,16 @@
         <input type="button" id="mod" name="mod" value="Modifica dettagli account" onclick="showForm()" />
     </p>
     <form method="post" action="/users/<%= user.username %>?_method=PUT" id="editForm" style="display: none">
-        Nome: <%= user.name %>&nbsp|&nbsp<input type="text" name="name">;
-        Cognome: <%= user.last %>&nbsp|&nbsp<input type="text" name="last">;
-        Età: <%= user.age %>&nbsp|&nbsp<input type="number" min="1" max="110" name="age">;
-        E-mail: <%= user.email %>&nbsp|&nbsp<input type="email" name="email">;
-        Genere: <%= user.gender %>&nbsp|&nbsp<input type="text" name="gender">.
+        Nome: <input type="text" name="name" placeholder="<%= user.name %>">
+        Cognome: <input type="text" name="last" placeholder="<%= user.last %>">
+        Età: <input type="number" min="1" max="110" name="age" placeholder="<%= user.age %>">
+        Genere: <%= user.gender %>
+        <select id="gender" name="gender">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+        E-mail: <input type="email" name="email" placeholder="<%= user.email %>">
         <input type="submit" id="save" name="save" value="Salva">
     </form>
     <p>
