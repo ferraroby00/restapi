@@ -7,61 +7,6 @@ import fetch from "node-fetch";
 let counter;
 let popularity;
 
-/*async function initContext(found) {
-  let mList,
-    max,
-    toPush = {};
-
-  await Rating.aggregate([
-    { $group: { _id: "$movieId", count: { $sum: 1 } } },
-    { $sort: { count: -1 } },
-    { $limit: 1 },
-  ]).then((result) => {
-    console.log(result);
-    max = result[0].count;
-  });
-
-  console.log("Massimo: " + max);
-
-  await Movies.find({}, { movieId: 1, _id: 0 }).then((list) => (mList = list));
-
-  console.log(mList);
-  popularity = [];
-  console.log("Popularity-first: " + popularity);
-  //OK
-
-  await mList.forEach(function (el) {
-    Rating.aggregate([
-      {
-        $match: {
-          movieId: el.movieId,
-        },
-      },
-      {
-        $count: "ratings",
-      },
-    ])
-      .exec()
-      .then((value) => {
-        if (value[0]) {
-          return Movies.updateOne(
-            { movieId: el.movieId },
-            {
-              $set: {
-                popularity_index: parseFloat(
-                  (value[0].ratings / max).toFixed(3)
-                ),
-              },
-            }
-          ).exec();
-        }
-      })
-      .then(() => console.log(`Popularity for ${el.movieId} updated`));
-  });
-  await initVector();
-}
-*/
-
 //GET HANDLER - returns all users documents
 export const getAllUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
@@ -127,19 +72,23 @@ export const getPreferences = async (req, res) => {
   await Movies.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
     res.locals.film_two = found;
   });
-  /*await Link.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
+  await Link.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
     res.locals.imdb_one = found.imdbId;
   });
   await Link.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
     res.locals.imdb_two = found.imdbId;
-  });*/
-  /*await fetch(`https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt${res.locals.imdb_one}`).then((response) => {
-    console.log(response.status);
-    console.log(response.ok)
-    response.json();
-  }).then((data) => {
-    console.log(data);
-  })*/
+  });
+  await fetch(
+    "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + res.locals.imdb_one
+  )
+    .then((response) => {
+      console.log(response.status);
+      console.log(response.ok);
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+    });
   //Saves the preference counter into EJS template
   res.locals.count = counter;
   console.log("Contatore preferenze: " + res.locals.count);
