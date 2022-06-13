@@ -10,9 +10,9 @@ const PORT = 5000;
 
 app.set("view engine", "ejs");
 
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 app.use("/movies", movieRoutes);
 app.use("/users", userRoutes);
