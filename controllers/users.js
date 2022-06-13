@@ -72,28 +72,47 @@ export const getPreferences = async (req, res) => {
   await Movies.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
     res.locals.film_two = found;
   });
-  await Link.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
-    res.locals.imdb_one = found.imdbId;
-  });
-  await Link.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
-    res.locals.imdb_two = found.imdbId;
-  });
-  await fetch(
-    "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + res.locals.imdb_one
-  )
-    .then((response) => {
-      console.log(response.status);
-      console.log(response.ok);
-      return response.json();
+  await Link.findOne({ movieId: popularity[rand1].movieId })
+    .then((found) => {
+      return fetch(
+        "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + found.imdbId
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          //console.log(data);
+          if (data.posters.length !== 0) {
+            res.locals.imdb_one = data.posters.filter(
+              (element) => element.aspectRatio === 0.6666666666666666
+            )[0].link;
+            console.log(res.locals.imdb_one);
+          }
+        });
     })
-    .then((data) => {
-      //console.log(data);
-      if (data.posters.length !== 0) {
-        res.locals.imdb_one = data.posters.filter(
-          (element) => element.aspectRatio === 0.6666666666666666
-        )[0].link;
-        console.log(res.locals.imdb_one);
-      }
+    .then(() => {
+      console.log("Immagine 1 correttamente recuperata");
+    });
+  await Link.findOne({ movieId: popularity[rand2].movieId })
+    .then((found) => {
+      return fetch(
+        "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + found.imdbId
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          //console.log(data);
+          if (data.posters.length !== 0) {
+            res.locals.imdb_two = data.posters.filter(
+              (element) => element.aspectRatio === 0.6666666666666666
+            )[0].link;
+            console.log(res.locals.imdb_two);
+          }
+        });
+    })
+    .then(() => {
+      console.log("Immagine 2 correttamente recuperata");
     });
   //Saves the preference counter into EJS template
   res.locals.count = counter;
@@ -155,6 +174,8 @@ export const getUser = (req, res) => {
       res.locals.user = user;
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
+      res.locals.imdb_one = undefined;
+      res.locals.imdb_two = undefined;
       await initVector();
       //console.log(popularity);
       res.render("loggedUser", { user: user });

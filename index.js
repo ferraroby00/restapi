@@ -13,6 +13,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static('/public'));
 
 app.use("/movies", movieRoutes);
 app.use("/users", userRoutes);
