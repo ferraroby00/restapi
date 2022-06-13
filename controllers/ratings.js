@@ -41,6 +41,7 @@ export const getAllRatings = (req, res) => {
 export const insertRating = (req, res) => {
   let max;
   let rating;
+  let movieIdTemp;
   //Finds movieId associated to Movie Title from the view
   Movie.findOne({ title: req.body.movieTitle })
     .then((result) => {
@@ -91,7 +92,7 @@ export const insertRating = (req, res) => {
     })
     .then((updateLog) => {
       console.log(updateLog);
-      res.end();
+      res.redirect("/users/");
     })
     .catch((err) => {
       res.json({ message: err });
