@@ -1,6 +1,7 @@
-import Rating from "../models/rating.js";
 import mongoose from "mongoose";
+import Rating from "../models/rating.js";
 import Movie from "../models/movie.js";
+import User from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
 export const getAllRatings = (req, res) => {
@@ -92,7 +93,7 @@ export const insertRating = (req, res) => {
     })
     .then((updateLog) => {
       console.log(updateLog);
-      res.redirect("/users/");
+      res.redirect("/users/" + req.body.uname);
     })
     .catch((err) => {
       res.json({ message: err });
