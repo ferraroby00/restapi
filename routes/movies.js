@@ -1,7 +1,7 @@
 import express from "express";
 import methodOverride from "method-override";
 import {
-  getAllMovies,
+  getMovies,
   insertMovie,
   getMovie,
   deleteMovie,
@@ -17,7 +17,7 @@ router.use(
 );
 
 //get all movies
-router.get("/", getAllMovies);
+router.get("/", getMovies);
 
 //get movie by Id
 router.get("/:id", getMovie);
