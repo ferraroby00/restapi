@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import Movie from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
-export const getAll = (req, res) => {
+export const getAllRatings = (req, res) => {
   Rating.aggregate([
     { $match: { rating: { $exists: true } } },
     { $group: { _id: "$filmId", averageRating: { $avg: "$rating" } } },

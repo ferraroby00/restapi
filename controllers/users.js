@@ -63,7 +63,7 @@ let popularity;
 */
 
 //GET HANDLER - returns all users documents
-export const getUsers = (req, res) => {
+export const getAllUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
   if (req.query.uname) {
     //Inits selection counter

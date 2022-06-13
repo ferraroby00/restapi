@@ -1,21 +1,29 @@
 import express from "express";
-const router = express.Router();
+import methodOverride from "method-override";
 import {
-  getMovies,
+  getAllMovies,
   insertMovie,
   getMovie,
   deleteMovie,
   updateMovie,
 } from "../controllers/movies.js";
 
-//get all movies
-router.get("/", getMovies);
+const router = express.Router();
 
-//insert movie
-router.post("/", insertMovie);
+router.use(
+  methodOverride("_method", {
+    methods: ["POST", "GET"],
+  })
+);
+
+//get all movies
+router.get("/", getAllMovies);
 
 //get movie by Id
 router.get("/:id", getMovie);
+
+//insert movie
+router.post("/", insertMovie);
 
 //delete movie by Id
 router.delete("/:id", deleteMovie);

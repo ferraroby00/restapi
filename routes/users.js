@@ -1,7 +1,7 @@
 import express from "express";
 import methodOverride from "method-override";
 import {
-  getUsers,
+  getAllUsers,
   createUser,
   getUser,
   deleteUser,
@@ -19,13 +19,13 @@ router.use(
 );
 
 //get all users
-router.get("/", getUsers);
-
-//insert user
-router.post("/", createUser);
+router.get("/", getAllUsers);
 
 //get user by username
 router.get("/:uname", getUser);
+
+//insert user
+router.post("/", createUser);
 
 //get to pair-wise preferences by username
 router.get("/:uname/preferences", getPreferences);
