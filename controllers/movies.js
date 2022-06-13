@@ -1,16 +1,4 @@
 import Movie from "../models/movie.js";
-import Rating from "../models/rating.js";
-
-//GET HANDLER - returns all movies documents
-export const getMovies = (req, res) => {
-  Movie.find({})
-    .then((films) => {
-      res.send(films);
-    })
-    .catch((err) => {
-      res.json({ message: err });
-    });
-};
 
 //Function that gets movies array
 export async function getMovieList(flag) {
@@ -30,6 +18,17 @@ export async function getMovieList(flag) {
   }
   return mList;
 }
+
+//GET HANDLER - returns all movies documents
+export const getMovies = (req, res) => {
+  Movie.find({})
+    .then((films) => {
+      res.send(films);
+    })
+    .catch((err) => {
+      res.json({ message: err });
+    });
+};
 
 //POST HANDLER - inserts a new movie document
 export const insertMovie = (req, res) => {
@@ -70,19 +69,14 @@ export const deleteMovie = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
-  /*
-  //Deletes ratings associated to the deleted film
-  Rating.deleteMany({ filmId: id }).catch((err) => {
-    res.json({ message: err });
-  });*/
 };
 
 //PATCH BY ID HANDLER - updates a movie by Id and by specific fields stored in HTTP request body
-export const updateMovie = async(req, res) => {
+export const updateMovie = async (req, res) => {
   const { id } = req.params;
   const { title, genres } = req.body;
 
-  /*if (title)
+  if (title)
     Movie.updateOne({ movieId: id }, { $set: { title: title } })
       .then((updated) => {
         res.send(`Film updated successfully`);
@@ -97,30 +91,5 @@ export const updateMovie = async(req, res) => {
       })
       .catch((err) => {
         res.json({ message: err });
-      });*/
-  if (res.locals.max) {
-    await Rating.aggregate([
-      {
-        $match: {
-          movieId: el.movieId,
-        },
-      },
-      {
-        $count: "ratings",
-      },
-    ]).then((value) => {
-      console.log("Stampa:"+value);
-      res.end();
-    });
-    /*Movie.updateOne(
-      { movieId: id },
-      { $set: { popularity_index: popularity_index } }
-    )
-      .then((updated) => {
-        res.send(`Film updated successfully`);
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });*/
-  }
+      });
 };

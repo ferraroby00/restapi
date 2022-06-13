@@ -1,6 +1,6 @@
 import Rating from "../models/rating.js";
 import mongoose from "mongoose";
-import { updateMovie } from "./movies.js";
+import Movie from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
 export const getAll = (req, res) => {
@@ -37,26 +37,56 @@ export const getAll = (req, res) => {
     });
 };
 
-//POST HANDLER - inserts a new rating document
+//POST HANDLER - inserts a new rating document and updates movie popularity_index
 export const insertRating = (req, res) => {
-  //let max;
+  let max;
+  let rating;
+  //Gets the maximum count used in normalization
   Rating.aggregate([
     { $group: { _id: "$movieId", count: { $sum: 1 } } },
     { $sort: { count: -1 } },
     { $limit: 1 },
-  ]).then((result) => {
-    console.log(result);
-    res.locals.max = result[0].count;
-  });
-  const rating = new Rating({
-    userId: req.body.userId,
-    movieId: req.body.movieId,
-    rating: req.body.rating,
-  });
-  rating
-    .save()
+  ])
+    .then((result) => {
+      //Creates and saves rating object posted
+      console.log(result);
+      max = result[0].count;
+      console.log(max);
+      rating = new Rating({
+        userId: req.body.userId,
+        movieId: req.body.movieId,
+        rating: req.body.rating,
+      });
+      return rating.save();
+    })
     .then(() => {
-      updateMovie(req,res);
+      //Counts ratings related to movieId
+      return Rating.aggregate([
+        {
+          $match: {
+            movieId: req.body.movieId,
+          },
+        },
+        {
+          $count: "ratings",
+        },
+      ]).exec();
+    })
+    .then((value) => {
+      console.log(value);
+      //Updates popularity_index
+      return Movie.updateOne(
+        { movieId: req.body.movieId },
+        {
+          $set: {
+            popularity_index: parseFloat((value[0].ratings / max).toFixed(3)),
+          },
+        }
+      );
+    })
+    .then((updateLog) => {
+      console.log(updateLog);
+      res.end();
     })
     .catch((err) => {
       res.json({ message: err });
