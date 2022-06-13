@@ -23,7 +23,6 @@ app.get("/home", (req, res) => {
   res.locals.user = undefined;
   res.locals.title1 = undefined;
   res.locals.title2 = undefined;
-  res.locals.flag = 0;
   res.render("home");
 });
 

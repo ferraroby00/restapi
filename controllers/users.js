@@ -106,9 +106,9 @@ export const createUser = (req, res) => {
       user.save();
     })
     .then(() => {
-      console.log("Success!! - Nuovo utente inserito");
-      //returns to homepage after successful registration (flag: 1 needed to display success message in home.ejs)
-      res.render("home", { flag: 1 });
+      console.log("Nuovo utente inserito");
+      //returns to homepage after successful registration
+      res.render("home");
     })
     .catch((err) => {
       res.json({ message: err });
@@ -201,7 +201,7 @@ export const getUser = (req, res) => {
       res.locals.title1 = undefined;
       res.locals.title2 = undefined;
       await initVector();
-      console.log(popularity);
+      //console.log(popularity);
       res.render("loggedUser", { user: user });
     })
     .catch((err) => {
@@ -213,7 +213,7 @@ export const getUser = (req, res) => {
 export const deleteUser = (req, res) => {
   User.deleteOne({ username: req.params.uname })
     .then(() => {
-      console.log(`${username} eliminato`);
+      console.log("Utente eliminato");
       res.redirect("/home");
     })
     .catch((err) => {
@@ -276,7 +276,8 @@ export const updateUser = async (req, res) => {
         res.json({ message: err });
       });
   }
+  //returns to homepage after successful user info update
   if (success === true) {
-    res.render("home", { flag: 2 });
+    res.render("home");
   }
 };
