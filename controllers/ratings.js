@@ -41,13 +41,17 @@ export const getAllRatings = (req, res) => {
 export const insertRating = (req, res) => {
   let max;
   let rating;
-  let movieIdTemp = Movie.findOne({ title: req.body.movieTitle }).movieId;
-  //Gets the maximum count used in normalization
-  Rating.aggregate([
-    { $group: { _id: "$movieId", count: { $sum: 1 } } },
-    { $sort: { count: -1 } },
-    { $limit: 1 },
-  ])
+  //Finds movieId associated to Movie Title from the view
+  Movie.findOne({ title: req.body.movieTitle })
+    .then((result) => {
+      movieIdTemp = result.movieId;
+      //Gets the maximum count used in normalization
+      return Rating.aggregate([
+        { $group: { _id: "$movieId", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 1 },
+      ]);
+    })
     .then((result) => {
       //Creates and saves rating object posted
       console.log(result);
