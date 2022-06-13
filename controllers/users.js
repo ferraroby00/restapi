@@ -87,7 +87,13 @@ export const getPreferences = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      //console.log(data);
+      if (data.posters.length !== 0) {
+        res.locals.imdb_one = data.posters.filter(
+          (element) => element.aspectRatio === 0.6666666666666666
+        )[0].link;
+        console.log(res.locals.imdb_one);
+      }
     });
   //Saves the preference counter into EJS template
   res.locals.count = counter;
