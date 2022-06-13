@@ -49,6 +49,7 @@
     <input type="button" id="addRatingButton" name="addRatingButton" value="Inserisci un rating" onclick="showRatingForm()" />
     <form method="post" action="/ratings/" id="ratingForm" style="display: none;">
         <input type="hidden" id="userId" name="userId" value="<%= user.userId %>">
+        <input type="hidden" id="uname" name="uname" value="<%= user.username %>">
         Film:&nbsp<input type="text" id="movieTitle" name="movieTitle" placeholder="nome (anno)">
         Voto:&nbsp<input type="number" id="movieRating" name="movieRating" min="0" max="5" placeholder="0 - 5" step="0.5">
         <input type="submit" value="Registra preferenza" onclick="return confirm('Procedere?');">
