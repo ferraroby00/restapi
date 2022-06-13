@@ -5,5 +5,7 @@
 
 #show-pair{
     display: flex;
+    justify-content: center;
+    gap: 70px;
 }
 
