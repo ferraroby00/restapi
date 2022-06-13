@@ -20,7 +20,7 @@ export async function getMovieList(flag) {
 }
 
 //GET HANDLER - returns all movies documents
-export const getMovies = (req, res) => {
+export const getAllMovies = (req, res) => {
   Movie.find({})
     .then((films) => {
       res.send(films);
