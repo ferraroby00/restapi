@@ -41,6 +41,7 @@ export const getAllRatings = (req, res) => {
 export const insertRating = (req, res) => {
   let max;
   let rating;
+  let movieIdTemp = Movie.findOne({ title: req.body.movieTitle }).movieId;
   //Gets the maximum count used in normalization
   Rating.aggregate([
     { $group: { _id: "$movieId", count: { $sum: 1 } } },
@@ -54,8 +55,8 @@ export const insertRating = (req, res) => {
       console.log(max);
       rating = new Rating({
         userId: req.body.userId,
-        movieId: req.body.movieId,
-        rating: req.body.rating,
+        movieId: movieIdTemp,
+        rating: req.body.movieRating,
       });
       return rating.save();
     })
@@ -64,7 +65,7 @@ export const insertRating = (req, res) => {
       return Rating.aggregate([
         {
           $match: {
-            movieId: req.body.movieId,
+            movieId: movieIdTemp,
           },
         },
         {
@@ -76,7 +77,7 @@ export const insertRating = (req, res) => {
       console.log(value);
       //Updates popularity_index
       return Movie.updateOne(
-        { movieId: req.body.movieId },
+        { movieId: movieIdTemp },
         {
           $set: {
             popularity_index: parseFloat((value[0].ratings / max).toFixed(3)),
