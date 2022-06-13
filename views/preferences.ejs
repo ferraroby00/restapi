@@ -7,7 +7,8 @@
     <title>
         Preferenza film
     </title>
-    <link href="/public/assets/style.css" rel="stylesheet"  type="text/css">
+    <link href="/public/assets/style.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
@@ -21,14 +22,14 @@
                 <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>">
                 <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>">
                 <div class="content-box">
-                    <img src="<%= imdb_one %>" class="img"><br/>
+                    <img src="<%= imdb_one %>" class="img"><br />
                     <input type="radio" id="opz_one" name="opz" value="<%= film_one.movieId %>">
                     <label for="opz_one">
                         <%= film_one.title %>
                     </label><br>
-                </div class="content-box">
-                <div>
-                    <img src="<%= imdb_two %>" class="img"><br/>
+                </div>
+                <div class="content-box">
+                    <img src="<%= imdb_two %>" class="img"><br />
                     <input type="radio" id="opz_two" name="opz" value="<%= film_two.movieId %>">
                     <label for="opz_two">
                         <%= film_two.title %>
