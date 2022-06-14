@@ -47,7 +47,7 @@
 
     <p>
     <input type="button" id="addRatingButton" name="addRatingButton" value="Inserisci un rating" onclick="showRatingForm()" />
-    <form method="post" action="/ratings/" id="ratingForm" style="display: none;">
+    <form method="post" action="/ratings" id="ratingForm" style="display: none;">
         <input type="hidden" id="userId" name="userId" value="<%= user.userId %>">
         <input type="hidden" id="uname" name="uname" value="<%= user.username %>">
         Film:&nbsp<input type="text" id="movieTitle" name="movieTitle" placeholder="nome (anno)">

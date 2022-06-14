@@ -22,14 +22,22 @@
                 <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>">
                 <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>">
                 <div class="content-box">
-                    <img src="<%= imdb_one %>" class="img"><br />
+                    <% if(imdb_one){ %>
+                        <img src="<%= imdb_one %>" class="img"><br />
+                    <%} else {%>
+                        <img src="/public/imgs/img_not_available.png" class="img"><br />
+                    <% } %>
                     <input type="radio" id="opz_one" name="opz" value="<%= film_one.movieId %>">
                     <label for="opz_one">
                         <%= film_one.title %>
                     </label><br>
                 </div>
                 <div class="content-box">
-                    <img src="<%= imdb_two %>" class="img"><br />
+                    <% if(imdb_two){ %>
+                        <img src="<%= imdb_two %>" class="img"><br />
+                    <%} else {%>
+                        <img src="/public/imgs/img_not_available.png" class="img"><br />
+                    <% } %>
                     <input type="radio" id="opz_two" name="opz" value="<%= film_two.movieId %>">
                     <label for="opz_two">
                         <%= film_two.title %>
@@ -38,15 +46,16 @@
             </div>
         </fieldset>
         </p>
-
-        <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');">
+        <div id="next">
+            <input type="submit" id="continua" value="Continua" onclick="return confirm('Confermare la scelta?');">
+        </div>
     </form>
     </p>
 
     <p>
         <% if(count>= 3) { %>
             <a href="http://localhost:5000/home">
-                <input type="button" id="stop" name="stop" value="Termina registrazione"
+                <input type="button" id="stop" name="stop" value="Concludi"
                     onclick="return confirm('Terminare la registrazione?');">
             </a>
             <% } %>

@@ -62,6 +62,8 @@ export const createUser = (req, res) => {
 
 //PREFERENCES POST HANDLER - randomically generate movie pairs based on popularity array
 export const getPreferences = async (req, res) => {
+  res.locals.imdb_one = undefined;
+  res.locals.imdb_two = undefined;
   //generating random indexes for the movieIds most popular array (popularity)
   const rand1 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
   const rand2 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
@@ -171,17 +173,21 @@ export const getUser = (req, res) => {
   const { uname } = req.params;
   User.findOne({ username: uname })
     .then(async (user) => {
-      res.locals.user = user;
-      res.locals.title1 = undefined;
-      res.locals.title2 = undefined;
-      res.locals.imdb_one = undefined;
-      res.locals.imdb_two = undefined;
-      await initVector();
-      //console.log(popularity);
-      res.render("loggedUser", { user: user });
+      if (user !== null) {
+        res.locals.user = user;
+        res.locals.title1 = undefined;
+        res.locals.title2 = undefined;
+        res.locals.imdb_one = undefined;
+        res.locals.imdb_two = undefined;
+        await initVector();
+        //console.log(popularity);
+        res.render("loggedUser", { user: user });
+      } else {
+        res.render("home");
+      }
     })
     .catch((err) => {
-      res.json({ message: err });
+      res.json({ message: "Errore nella promise" });
     });
 };
 

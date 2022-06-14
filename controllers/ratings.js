@@ -43,9 +43,11 @@ export const insertRating = (req, res) => {
   let max;
   let rating;
   let movieIdTemp;
+  let aux;
   //Finds movieId associated to Movie Title from the view
   Movie.findOne({ title: req.body.movieTitle })
     .then((result) => {
+      aux = result;
       movieIdTemp = result.movieId;
       //Gets the maximum count used in normalization
       return Rating.aggregate([
@@ -96,7 +98,12 @@ export const insertRating = (req, res) => {
       res.redirect("/users/" + req.body.uname);
     })
     .catch((err) => {
-      res.json({ message: err });
+      if (aux === null) {
+        res.redirect("/users/" + req.body.uname);
+        console.log("Film inserito non esistente");
+      } else {
+        res.json({ message: "Errore nella promise chain" });
+      }
     });
 };
 
