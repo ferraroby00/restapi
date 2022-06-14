@@ -98,7 +98,7 @@ export const getPreferences = async (req, res) => {
   await Link.findOne({ movieId: popularity[rand2].movieId })
     .then((found) => {
       return fetch(
-        "https://imdb-api.com/en/API/Posters/k_t6j7fq2o/tt" + found.imdbId
+        "https://imdb-api.com/en/API/Posters/k_jge7265m/tt" + found.imdbId
       )
         .then((response) => {
           return response.json();
