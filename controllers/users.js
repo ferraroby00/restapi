@@ -6,6 +6,7 @@ import Link from "../models/link.js";
 import fetch from "node-fetch";
 let counter;
 let popularity;
+let mList;
 
 //GET HANDLER - returns all users documents
 export const getAllUsers = (req, res) => {
@@ -66,12 +67,12 @@ export const getPreferences = async (req, res) => {
   res.locals.imdb_two = undefined;
   //generating random indexes for the movieIds most popular array (popularity)
   const rand1 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
-  const rand2 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
+  const rand2 = "" + Math.floor(Math.random() * (mList.length - 0) + 0);
   //Queries to get two random films to choose
   await Movies.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
     res.locals.film_one = found;
   });
-  await Movies.findOne({ movieId: popularity[rand2].movieId }).then((found) => {
+  await Movies.findOne({ movieId: mList[rand2].movieId }).then((found) => {
     res.locals.film_two = found;
   });
   await Link.findOne({ movieId: popularity[rand1].movieId })
@@ -95,7 +96,7 @@ export const getPreferences = async (req, res) => {
     .then(() => {
       console.log("Immagine 1 correttamente recuperata");
     });
-  await Link.findOne({ movieId: popularity[rand2].movieId })
+  await Link.findOne({ movieId: mList[rand2].movieId })
     .then((found) => {
       return fetch(
         "https://imdb-api.com/en/API/Posters/k_jge7265m/tt" + found.imdbId
@@ -162,9 +163,9 @@ export const postPreference = (req, res) => {
 
 //Values popularity vector
 async function initVector() {
-  let result = await movieController.getMovieList(1);
+  mList = await movieController.getMovieList(1);
   //Filters result array based on a specific value
-  popularity = result.filter((element) => element.popularity_index > 0.1);
+  popularity = mList.filter((element) => element.popularity_index > 0.1);
   //console.log(popularity);
 }
 
