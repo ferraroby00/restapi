@@ -1,5 +1,4 @@
 import User from "../models/user.js";
-import Rating from "../models/rating.js";
 import Movies from "../models/movie.js";
 import * as movieController from "../controllers/movies.js";
 import Link from "../models/link.js";
@@ -7,6 +6,7 @@ import fetch from "node-fetch";
 let counter;
 let popularity;
 let mList;
+let toRate;
 
 //GET HANDLER - returns all users documents
 export const getAllUsers = (req, res) => {
@@ -162,11 +162,18 @@ export const postPreference = (req, res) => {
 };
 
 //Values popularity vector
-async function initVector() {
+async function initVectors(u) {
+  toRate = [];
   mList = await movieController.getMovieList(1);
   //Filters result array based on a specific value
   popularity = mList.filter((element) => element.popularity_index > 0.1);
   //console.log(popularity);
+  let demo = await movieController.getMovieList(2);
+  u.preferences.forEach((p)=>{
+    toRate.push(demo.find(el => el.movieId === p.user));
+  })
+  //console.log(toRate);
+  //console.log(toRate);
 }
 
 //GET BY USERNAME HANDLER - returns a user by username
@@ -175,14 +182,16 @@ export const getUser = (req, res) => {
   User.findOne({ username: uname })
     .then(async (user) => {
       if (user !== null) {
-        res.locals.user = user;
-        res.locals.title1 = undefined;
-        res.locals.title2 = undefined;
-        res.locals.imdb_one = undefined;
-        res.locals.imdb_two = undefined;
-        await initVector();
+        // res.locals.user = user;
+        // res.locals.title1 = undefined;
+        // res.locals.title2 = undefined;
+        // res.locals.imdb_one = undefined;
+        // res.locals.imdb_two = undefined;
+        await initVectors(user);
+        console.log(toRate);
+        //res.locals.films = toRate;
         //console.log(popularity);
-        res.render("loggedUser", { user: user });
+        res.render("loggedUser", { user: user , films: toRate});
       } else {
         res.render("home");
       }

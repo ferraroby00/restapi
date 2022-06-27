@@ -9,12 +9,18 @@ export async function getMovieList(flag) {
         mList = docs;
       }
     );
-  } else {
+  } else if(flag === 0){
     await Movie.find({}, { movieId: 1, _id: 0 })
       .then((docs) => {
         mList = docs;
       })
       .catch((err) => (mList = { error: err }));
+  }else{
+    await Movie.find({}, { movieId: 1, title: 1, _id: 0 })
+    .then((docs) => {
+      mList = docs;
+    })
+    .catch((err) => (mList = { error: err }));
   }
   return mList;
 }
