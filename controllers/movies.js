@@ -1,26 +1,28 @@
 import Movie from "../models/movie.js";
 
-//Function that gets movies array
+//gets movies array
 export async function getMovieList(flag) {
   let mList;
   if (flag === 1) {
-    await Movie.find({}, { movieId: 1, prob_index: 1, _id: 0 }).then(
-      (docs) => {
-        mList = docs;
-      }
-    );
-  } else if(flag === 0){
+    await Movie.find({}, { movieId: 1, prob_index: 1, _id: 0 }).then((docs) => {
+      mList = docs;
+    });
+  } else if (flag === 0) {
     await Movie.find({}, { movieId: 1, _id: 0 })
       .then((docs) => {
         mList = docs;
       })
-      .catch((err) => (mList = { error: err }));
-  }else{
+      .catch(() => {
+        mList = { error: "Cannot get movie list" };
+      });
+  } else {
     await Movie.find({}, { movieId: 1, title: 1, _id: 0 })
-    .then((docs) => {
-      mList = docs;
-    })
-    .catch((err) => (mList = { error: err }));
+      .then((docs) => {
+        mList = docs;
+      })
+      .catch(() => {
+        mList = { error: "Cannot get movie list" };
+      });
   }
   return mList;
 }
@@ -31,8 +33,8 @@ export const getAllMovies = (req, res) => {
     .then((films) => {
       res.send(films);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot get movies" });
     });
 };
 
@@ -48,8 +50,8 @@ export const insertMovie = (req, res) => {
     .then((data) => {
       res.json(data);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot add movie" });
     });
 };
 
@@ -60,8 +62,8 @@ export const getMovie = (req, res) => {
     .then((found) => {
       res.send(found);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot find movie" });
     });
 };
 
@@ -69,11 +71,11 @@ export const getMovie = (req, res) => {
 export const deleteMovie = (req, res) => {
   const { id } = req.params;
   Movie.deleteOne({ movieId: id })
-    .then((deleted) => {
-      res.send(`Film deleted from database`);
+    .then(() => {
+      res.send(`Movie deleted from database`);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot delete movie" });
     });
 };
 
@@ -81,21 +83,20 @@ export const deleteMovie = (req, res) => {
 export const updateMovie = async (req, res) => {
   const { id } = req.params;
   const { title, genres } = req.body;
-
   if (title)
     Movie.updateOne({ movieId: id }, { $set: { title: title } })
-      .then((updated) => {
-        res.send(`Film updated successfully`);
+      .then(() => {
+        res.send(`Movie title updated successfully`);
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update movie title" });
       });
   if (genres)
     Movie.updateOne({ movieId: id }, { $set: { genres: genres } })
-      .then((updated) => {
-        res.send(`Film updated successfully`);
+      .then(() => {
+        res.send(`Movie genre updated successfully`);
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update movie genre" });
       });
 };

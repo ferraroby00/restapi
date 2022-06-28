@@ -32,11 +32,11 @@ mongoose.connect(
   "mongodb+srv://restapi:tesi_restAPI@thesis.mvjviod.mongodb.net/ufr"
 );
 mongoose.connection.on("open", () => {
-  console.log("Connesso al database");
+  console.log("Connected to database");
 });
 mongoose.connection.on("error", () => {
-  console.log("Errore nella connessione al database");
+  console.log("Error connecting to database");
 });
 
 //server listening on port PORT
-app.listen(PORT, () => console.log(`Server in ascolto alla porta ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

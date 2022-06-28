@@ -12,7 +12,7 @@ let toRate;
 export const getAllUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
   if (req.query.uname) {
-    //Inits selection counter
+    //init selection counter
     counter = 0;
     res.redirect("/users/" + req.query.uname);
   } else {
@@ -20,8 +20,8 @@ export const getAllUsers = (req, res) => {
       .then((users) => {
         res.send(users);
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot get users" });
       });
   }
 };
@@ -48,16 +48,15 @@ export const createUser = (req, res) => {
       });
     })
     .then(() => {
-      //Saves user in MongoDB
+      //saves user in MongoDB
       user.save();
     })
     .then(() => {
-      console.log("Nuovo utente inserito");
       //returns to homepage after successful registration
       res.render("home");
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot add user" });
     });
 };
 
@@ -69,7 +68,7 @@ export const getPreferences = async (req, res) => {
   //generating random indexes for the movieIds most popular array (popularity)
   const rand1 = getRandom();
   const rand2 = getRandom();
-  //Queries to get two random films to choose
+  //queries to get two random films to choose
   await Movies.findOne({ movieId: rand1 }).then((found) => {
     res.locals.film_one = found;
   });
@@ -85,7 +84,6 @@ export const getPreferences = async (req, res) => {
           return response.json();
         })
         .then((data) => {
-          //console.log(data);
           if (data.posters.length !== 0) {
             res.locals.imdb_one = data.posters.filter(
               (element) => element.aspectRatio === 0.6666666666666666
@@ -95,7 +93,7 @@ export const getPreferences = async (req, res) => {
         });
     })
     .then(() => {
-      console.log("Immagine 1 correttamente recuperata");
+      console.log("Got img 1");
     });
   await Link.findOne({ movieId: rand2 })
     .then((found) => {
@@ -106,7 +104,6 @@ export const getPreferences = async (req, res) => {
           return response.json();
         })
         .then((data) => {
-          //console.log(data);
           if (data.posters.length !== 0) {
             res.locals.imdb_two = data.posters.filter(
               (element) => element.aspectRatio === 0.6666666666666666
@@ -116,14 +113,13 @@ export const getPreferences = async (req, res) => {
         });
     })
     .then(() => {
-      console.log("Immagine 2 correttamente recuperata");
+      console.log("Got img 2");
     });
-  //Saves the preference counter into EJS template
+  //saves the preference counter into EJS template
   res.locals.count = counter;
   console.log("Contatore preferenze: " + res.locals.count);
-  //Saves username into EJS template
+  //saves username into EJS template
   res.locals.user = req.params.uname;
-
   res.render("preferences");
 };
 
@@ -152,37 +148,37 @@ export const postPreference = (req, res) => {
       ).exec();
     })
     .then(() => {
-      //Updates the counter
-      counter = counter + 1;
+      counter++;
       //redirection to the getPreference
       res.redirect("/users/" + req.params.uname + "/preferences");
     })
-    .catch((err) => {
-      res.json(err);
+    .catch(() => {
+      res.json({ message: "Cannot register preference" });
     });
 };
 
+//custom random functions that takes into consideration the probability of each item (movie)
 function getRandom() {
-    let num = Math.random(),
-        s = 0,
-        lastIndex = mList.length - 1;
-    for (let i = 0; i < lastIndex; ++i) {
-        s += mList[i].prob_index;
-        if (num < s) {
-            return mList[i].movieId;
-        }
+  let num = Math.random(),
+    s = 0,
+    lastIndex = mList.length - 1;
+  for (let i = 0; i < lastIndex; ++i) {
+    s += mList[i].prob_index;
+    if (num < s) {
+      return mList[i].movieId;
     }
-    return mList[lastIndex].movieId;
-};
+  }
+  return mList[lastIndex].movieId;
+}
 
-//Values popularity vector
+//values popularity vector
 async function initVectors(u) {
   toRate = [];
   mList = await movieController.getMovieList(1);
   let demo = await movieController.getMovieList(2);
-  u.preferences.forEach((p)=>{
-    toRate.push(demo.find(el => el.movieId === p.user));
-  })
+  u.preferences.forEach((p) => {
+    toRate.push(demo.find((el) => el.movieId === p.user));
+  });
 }
 
 //GET BY USERNAME HANDLER - returns a user by username
@@ -192,13 +188,13 @@ export const getUser = (req, res) => {
     .then(async (user) => {
       if (user !== null) {
         await initVectors(user);
-        res.render("loggedUser", { user: user , films: toRate});
+        res.render("loggedUser", { user: user, films: toRate });
       } else {
         res.render("home");
       }
     })
-    .catch((err) => {
-      res.json({ message: "Errore nella promise" });
+    .catch(() => {
+      res.json({ message: "Cannot get user" });
     });
 };
 
@@ -209,13 +205,9 @@ export const deleteUser = (req, res) => {
       console.log("Utente eliminato");
       res.redirect("/home");
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot delete user" });
     });
-  //deletes ratings associated to the deleted user
-  // Rating.deleteMany({ ratedBy: id }).catch((err) => {
-  //   res.json({ message: err });
-  // });
 };
 
 //PATCH BY ID HANDLER - updates a user by username and by specific fields stored in HTTP request body
@@ -229,8 +221,8 @@ export const updateUser = async (req, res) => {
       .then(() => {
         success = true;
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update user name" });
       });
   }
   if (last) {
@@ -238,8 +230,8 @@ export const updateUser = async (req, res) => {
       .then(() => {
         success = true;
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update user surname" });
       });
   }
   if (age) {
@@ -247,8 +239,8 @@ export const updateUser = async (req, res) => {
       .then(() => {
         success = true;
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update user age" });
       });
   }
   if (email) {
@@ -256,8 +248,8 @@ export const updateUser = async (req, res) => {
       .then(() => {
         success = true;
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update user email" });
       });
   }
   if (gender) {
@@ -265,8 +257,8 @@ export const updateUser = async (req, res) => {
       .then(() => {
         success = true;
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update user gender" });
       });
   }
   //returns to homepage after successful user info update

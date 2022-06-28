@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Rating from "../models/rating.js";
 import Movie from "../models/movie.js";
-import User from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
 export const getAllRatings = (req, res) => {
@@ -33,42 +32,48 @@ export const getAllRatings = (req, res) => {
     .then(function (el) {
       res.send(el);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot get ratings" });
     });
 };
 
 //POST HANDLER - inserts a new rating document and updates movie popularity_index
 export const insertRating = (req, res) => {
   let max;
-  Movie.findOne({ title: req.body.movieTitle }).then((rs) => {
-    const rating = new Rating({
-      userId: req.body.userId,
-      movieId: rs.movieId,
-      rating: req.body.movieRating,
-    });
-    return rating.save();
-  }).then((rs) => {
-    console.log(rs);
-    return Rating.countDocuments({});
-  }).then((rs) => {
-    max = rs;
-    console.log(rs);
-    return Rating.aggregate([
-      { $group: { _id: "$movieId", count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ])
-  }).then((rs) => {
-    console.log(rs);
-    console.log(max);
-    rs.forEach((el) => {
-      el.count = el.count/max;
+  Movie.findOne({ title: req.body.movieTitle })
+    .then((rs) => {
+      const rating = new Rating({
+        userId: req.body.userId,
+        movieId: rs.movieId,
+        rating: req.body.movieRating,
+      });
+      return rating.save();
     })
-    console.log(rs);
-    rs.forEach((el) => {
-      Movie.updateOne({movieId: el._id},{$set: {prob_index: el.count}},()=>{});
+    .then((rs) => {
+      return Rating.countDocuments({});
+    })
+    .then((rs) => {
+      max = rs;
+      return Rating.aggregate([
+        { $group: { _id: "$movieId", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]);
+    })
+    .then((rs) => {
+      rs.forEach((el) => {
+        el.count = el.count / max;
+      });
+      rs.forEach((el) => {
+        Movie.updateOne(
+          { movieId: el._id },
+          { $set: { prob_index: el.count } },
+          () => {}
+        );
+      });
+    })
+    .catch(() => {
+      res.json({ message: "Cannot add rating" });
     });
-  });
   res.redirect("/users/" + req.body.uname);
 };
 
@@ -107,17 +112,17 @@ export const getRating = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
-}
+};
 
 //DELETE BY ID HANDLER - deletes a rating by ID
 export const deleteRating = (req, res) => {
   const { id } = req.params;
   Rating.deleteOne({ _id: id })
     .then(() => {
-      res.send(`Rating with id: ${id} deleted from database`);
+      res.send(`Rating id: ${id} deleted from database`);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot delete rating" });
     });
 };
 
@@ -125,13 +130,12 @@ export const deleteRating = (req, res) => {
 export const updateRating = (req, res) => {
   const { id } = req.params;
   const { rating } = req.body;
-
   if (rating)
     Rating.updateOne({ _id: id }, { $set: { rating: rating } })
       .then(() => {
         res.send(`Rating with id: ${id} updated`);
       })
-      .catch((err) => {
-        res.json({ message: err });
+      .catch(() => {
+        res.json({ message: "Cannot update rating" });
       });
 };

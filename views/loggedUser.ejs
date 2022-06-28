@@ -1,92 +1,69 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset=“utf-8”>
-    <title>
-        Pagina utente
-    </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script>
-        function showUserForm() {
-            document.getElementById("userForm").style.display = "block";
-        }
-        function showRatingForm() {
-            document.getElementById("ratingBox").style.display = "block";
-        }
-    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset=“utf-8” />
+  <title>Pagina utente</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+  <script>
+    function showUserForm() { document.getElementById("userForm").style.display = "block"; }
+    function showRatingForm() { document.getElementById("ratingBox").style.display = "block"; }
+  </script>
 </head>
 
 <body>
-    <h1>
-        Gestione utente
-    </h1>
-
-    <p>
-    <input type="button" class="btn btn-primary" id="userModButton" name="userModButton" value="Modifica dettagli account" onclick="showUserForm()" />
+  <h1>Gestione utente</h1>
+  <p>
+    <input type="button" class="btn btn-primary" id="userModButton" value="Modifica dettagli account" onclick="showUserForm()" />
     <form method="post" action="/users/<%= user.username %>?_method=PUT" id="userForm" style="display: none">
-        Nome:&nbsp<input type="text" name="name" placeholder="<%= user.name %>">
-        Cognome:&nbsp<input type="text" name="last" placeholder="<%= user.last %>">
-        Età:&nbsp<input type="number" min="1" max="110" name="age" placeholder="<%= user.age %>">
-        Genere:&nbsp<%= user.gender %>
-            <select id="gender" name="gender">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-            </select>
-        E-mail:&nbsp<input type="email" name="email" placeholder="<%= user.email %>">
-        <input type="submit" id="save" name="save" value="Salva">
+      Nome:&nbsp<input type="text" name="name" placeholder="<%= user.name %>" />
+      Cognome:&nbsp<input type="text" name="last" placeholder="<%= user.last %>" />
+      Età:&nbsp<input type="number" min="1" max="110" name="age" placeholder="<%= user.age %>" />
+      Genere:&nbsp<%= user.gender %>
+      <select id="gender" name="gender">
+        <option selected>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      E-mail:&nbsp<input type="email" name="email" placeholder="<%= user.email %>" />
+      <input type="submit" id="save" name="save" value="Salva" />
     </form>
-    </p>
-
-    <p>
-    <input type="button" class="btn btn-primary" id="addRatingButton" name="addRatingButton" value="Inserisci un rating" onclick="showRatingForm()" />
+  </p>
+  <p>
+    <input type="button" class="btn btn-primary" id="addRatingButton" value="Inserisci un rating" onclick="showRatingForm()" />
     <div id="ratingBox" style="display: none;">
-        <% if(films.length !== 0){%>
-            <%films.forEach((film)=>{%>
-                <form method="post" class="row row-cols-lg-auto g-3 align-items-center" action="/ratings" id="ratingForm">
-                    <div class="col-12">
-                        <input type="hidden" id="userId" name="userId" value="<%= user.userId %>">
-                        <input type="hidden" id="uname" name="uname" value="<%= user.username %>">
-                    </div>
-                    <div class="col-12">
-                        <label for="movieTitle" class="form-label" style="font-weight: bold;">Film:&nbsp</label>
-                        <div class="input-group">
-                            <input type="text" size="70" class="form-control-plaintext" id="movieTitle" name="movieTitle" value="<%= film.title %>" readonly>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label for="movieRating" class="form-label" style="font-weight: bold;">Voto:&nbsp</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="movieRating" name="movieRating" min="0" max="5" placeholder="0 - 5" step="0.5">
-                        </div>       
-                    </div>
-                    <div class="col-12">
-                        <div class="input-group">
-                            <input type="submit" class="btn btn-success" value="Registra rating" onclick="return confirm('Procedere?');"> 
-                        </div>
-                    </div>
-                </form>
-            <%})%>
-        <% }%>
+      <% if(films.length !== 0) { %>
+        <% films.forEach(film => { %>
+          <form method="post" class="row row-cols-lg-auto g-3 align-items-center" action="/ratings" id="ratingForm">
+            <div class="col-12">
+              <input type="hidden" id="userId" name="userId" value="<%= user.userId %>" />
+              <input type="hidden" id="uname" name="uname" value="<%= user.username %>" />
+            </div>
+            <div class="col-12">
+              <label for="movieTitle" class="form-label" style="font-weight: bold;">Film:&nbsp</label>
+              <div class="input-group"><input type="text" size="70" class="form-control-plaintext" id="movieTitle" name="movieTitle" value="<%= film.title %>" readonly /></div>
+            </div>
+            <div class="col-12">
+              <label for="movieRating" class="form-label" style="font-weight: bold;">Voto:&nbsp</label>
+              <div class="input-group"><input type="number" class="form-control" id="movieRating" name="movieRating" min="0" max="5" placeholder="0 - 5" step="0.5" /></div>
+            </div>
+            <div class="col-12"><div class="input-group"><input type="submit" class="btn btn-success" value="Registra rating" onclick="return confirm('Procedere?');" /></div></div>
+          </form>
+        <% }) %>
+      <% } %>
     </div>
-    
-    
-    </p>
-
-    <p>
-    <form method="get" action="/users/<%= user.username %>/preferences">
-        <input type="submit" class="btn btn-info" value="Vai alle preferenze">
+  </p>
+  <p><form method="get" action="/users/<%= user.username %>/preferences"><input type="submit" class="btn btn-info" value="Vai alle preferenze" /></form></p>
+  <p>
+    <form method="post" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
+      <input type="submit" class="btn btn-danger" id="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione di <%= user.username %>?');" />
     </form>
-    </p>
-
-    <p>
-        <form method="post" action="/users/<%= user.username %>?_method=DELETE" id="delForm">
-            <input type="submit" class="btn btn-danger" id="delButton" name="delButton" value="Elimina utente" onclick="return confirm('Confermare eliminazione di <%= user.username %> ?');">
-        </form>
-    </p>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </p>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 
 </html>

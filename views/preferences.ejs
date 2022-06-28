@@ -1,74 +1,60 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset=“utf-8”>
-    <title>Preferenza film</title>
-    <script>
-        function sub(){
-            if(confirm('Confermare la scelta?')){
-                document.getElementById("send").submit();
-            }
-        }
-    </script>
-    <link href="/public/assets/preferences.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset=“utf-8” />
+  <title>Preferenza film</title>
+  <link href="/public/assets/preferences.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <script>
+    function sub() { if (confirm('Confermare la scelta?')) { document.getElementById("send").submit(); } }
+  </script>
 </head>
 
 <body>
-    <p>
-    <form id="send" method="post" action="/users/<%= user %>/preferences">
-
-        <p>
+  <p>
+    <form id="send" method="post" action="/users/<%= user %>/preferences" />
+      <p>
         <fieldset>
-            <div style="text-align: center;">
-                <h2>Scegliere una delle due preferenze</h2>
+          <div style="text-align: center;"><h2>Scegliere una delle due preferenze</h2></div>
+          <div id="show-pair">
+            <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>" />
+            <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>" />
+            <div class="content-box">
+              <% if(imdb_one) { %>
+                <img src="<%= imdb_one %>" class="img" /><br />
+              <% } else { %>
+                <img src="/public/imgs/img_not_available.png" class="img" /><br />
+              <% } %>
+                <input type="radio" id="opz_one" name="opz" value="<%= film_one.movieId %>" />
+                <label for="opz_one"><%= film_one.title %></label><br />
             </div>
-            <div id="show-pair">
-                <input type="hidden" id="movie_one" name="movie_one" value="<%= film_one.movieId %>">
-                <input type="hidden" id="movie_two" name="movie_two" value="<%= film_two.movieId %>">
-                <div class="content-box">
-                    <% if(imdb_one){ %>
-                        <img src="<%= imdb_one %>" class="img"><br />
-                    <%} else {%>
-                        <img src="/public/imgs/img_not_available.png" class="img"><br />
-                    <% } %>
-                    <input type="radio" id="opz_one" name="opz" value="<%= film_one.movieId %>">
-                    <label for="opz_one">
-                        <%= film_one.title %>
-                    </label><br>
-                </div>
-                <div class="content-box">
-                    <% if(imdb_two){ %>
-                        <img src="<%= imdb_two %>" class="img"><br />
-                    <%} else {%>
-                        <img src="/public/imgs/img_not_available.png" class="img"><br />
-                    <% } %>
-                    <input type="radio" id="opz_two" name="opz" value="<%= film_two.movieId %>">
-                    <label for="opz_two">
-                        <%= film_two.title %>
-                    </label><br>
-                </div>
+            <div class="content-box">
+              <% if(imdb_two) { %>
+                <img src="<%= imdb_two %>" class="img" /><br />
+              <% } else { %>
+                <img src="/public/imgs/img_not_available.png" class="img" /><br />
+              <% } %>
+              <input type="radio" id="opz_two" name="opz" value="<%= film_two.movieId %>" />
+              <label for="opz_two"><%= film_two.title %></label><br />
             </div>
+          </div>
         </fieldset>
-        </p>
+      </p>
     </form>
-    </p>
-
-    <div id="button-box">
-      <div id="next">
-        <input type="button" id="continua" class="btn btn-success" value="Continua" onclick="sub()">
-      </div>
-        <% if(count>= 3) { %>
-            <div id="stop">
-                <a href="http://localhost:5000/home">
-                    <input type="button" class="btn btn-danger" id="stop" name="stop" value="Concludi" onclick="return confirm('Terminare la registrazione?');">
-                </a>
-            </div>
-        <% } %>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </p>
+  <div id="button-box">
+    <div id="next"><input type="button" id="continua" class="btn btn-success" value="Continua" onclick="sub()" /></div>
+    <% if(count >= 3) { %>
+      <div id="stop"><a href="http://localhost:5000/home"><input type="button" class="btn btn-danger" id="stop" name="stop" 
+        value="Concludi" onclick="return confirm('Terminare la registrazione?');" /></a></div>
+    <% } %>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 
 </html>
