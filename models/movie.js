@@ -13,7 +13,7 @@ const MovieSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  popularity_index: {
+  prob_index: {
     type: Number,
   },
 });

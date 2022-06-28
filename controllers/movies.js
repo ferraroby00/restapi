@@ -4,7 +4,7 @@ import Movie from "../models/movie.js";
 export async function getMovieList(flag) {
   let mList;
   if (flag === 1) {
-    await Movie.find({}, { movieId: 1, popularity_index: 1, _id: 0 }).then(
+    await Movie.find({}, { movieId: 1, prob_index: 1, _id: 0 }).then(
       (docs) => {
         mList = docs;
       }

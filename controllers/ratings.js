@@ -41,70 +41,35 @@ export const getAllRatings = (req, res) => {
 //POST HANDLER - inserts a new rating document and updates movie popularity_index
 export const insertRating = (req, res) => {
   let max;
-  let rating;
-  let movieIdTemp;
-  let aux;
-  //Finds movieId associated to Movie Title from the view
-  Movie.findOne({ title: req.body.movieTitle })
-    .then((result) => {
-      aux = result;
-      movieIdTemp = result.movieId;
-      //Gets the maximum count used in normalization
-      return Rating.aggregate([
-        { $group: { _id: "$movieId", count: { $sum: 1 } } },
-        { $sort: { count: -1 } },
-        { $limit: 1 },
-      ]);
-    })
-    .then((result) => {
-      //Creates and saves rating object posted
-      console.log(result);
-      max = result[0].count;
-      console.log(max);
-      rating = new Rating({
-        userId: req.body.userId,
-        movieId: movieIdTemp,
-        rating: req.body.movieRating,
-      });
-      return rating.save();
-    })
-    .then(() => {
-      //Counts ratings related to movieId
-      return Rating.aggregate([
-        {
-          $match: {
-            movieId: movieIdTemp,
-          },
-        },
-        {
-          $count: "ratings",
-        },
-      ]).exec();
-    })
-    .then((value) => {
-      console.log(value);
-      //Updates popularity_index
-      return Movie.updateOne(
-        { movieId: movieIdTemp },
-        {
-          $set: {
-            popularity_index: parseFloat((value[0].ratings / max).toFixed(3)),
-          },
-        }
-      );
-    })
-    .then((updateLog) => {
-      console.log(updateLog);
-      res.redirect("/users/" + req.body.uname);
-    })
-    .catch((err) => {
-      if (aux === null) {
-        res.redirect("/users/" + req.body.uname);
-        console.log("Film inserito non esistente");
-      } else {
-        res.json({ message: "Errore nella promise chain" });
-      }
+  Movie.findOne({ title: req.body.movieTitle }).then((rs) => {
+    const rating = new Rating({
+      userId: req.body.userId,
+      movieId: rs.movieId,
+      rating: req.body.movieRating,
     });
+    return rating.save();
+  }).then((rs) => {
+    console.log(rs);
+    return Rating.countDocuments({});
+  }).then((rs) => {
+    max = rs;
+    console.log(rs);
+    return Rating.aggregate([
+      { $group: { _id: "$movieId", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ])
+  }).then((rs) => {
+    console.log(rs);
+    console.log(max);
+    rs.forEach((el) => {
+      el.count = el.count/max;
+    })
+    console.log(rs);
+    rs.forEach((el) => {
+      Movie.updateOne({movieId: el._id},{$set: {prob_index: el.count}},()=>{});
+    });
+  });
+  res.redirect("/users/" + req.body.uname);
 };
 
 //GET BY ID HANDLER - returns a rating by film ID
@@ -142,7 +107,7 @@ export const getRating = (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
-};
+}
 
 //DELETE BY ID HANDLER - deletes a rating by ID
 export const deleteRating = (req, res) => {

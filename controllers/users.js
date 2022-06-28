@@ -3,8 +3,8 @@ import Movies from "../models/movie.js";
 import * as movieController from "../controllers/movies.js";
 import Link from "../models/link.js";
 import fetch from "node-fetch";
+
 let counter;
-let popularity;
 let mList;
 let toRate;
 
@@ -65,17 +65,18 @@ export const createUser = (req, res) => {
 export const getPreferences = async (req, res) => {
   res.locals.imdb_one = undefined;
   res.locals.imdb_two = undefined;
+  console.log(getRandom());
   //generating random indexes for the movieIds most popular array (popularity)
-  const rand1 = "" + Math.floor(Math.random() * (popularity.length - 0) + 0);
-  const rand2 = "" + Math.floor(Math.random() * (mList.length - 0) + 0);
+  const rand1 = getRandom();
+  const rand2 = getRandom();
   //Queries to get two random films to choose
-  await Movies.findOne({ movieId: popularity[rand1].movieId }).then((found) => {
+  await Movies.findOne({ movieId: rand1 }).then((found) => {
     res.locals.film_one = found;
   });
-  await Movies.findOne({ movieId: mList[rand2].movieId }).then((found) => {
+  await Movies.findOne({ movieId: rand2 }).then((found) => {
     res.locals.film_two = found;
   });
-  await Link.findOne({ movieId: popularity[rand1].movieId })
+  await Link.findOne({ movieId: rand1 })
     .then((found) => {
       return fetch(
         "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + found.imdbId
@@ -96,7 +97,7 @@ export const getPreferences = async (req, res) => {
     .then(() => {
       console.log("Immagine 1 correttamente recuperata");
     });
-  await Link.findOne({ movieId: mList[rand2].movieId })
+  await Link.findOne({ movieId: rand2 })
     .then((found) => {
       return fetch(
         "https://imdb-api.com/en/API/Posters/k_4zp4f51i/tt" + found.imdbId
@@ -161,19 +162,27 @@ export const postPreference = (req, res) => {
     });
 };
 
+function getRandom() {
+    let num = Math.random(),
+        s = 0,
+        lastIndex = mList.length - 1;
+    for (let i = 0; i < lastIndex; ++i) {
+        s += mList[i].prob_index;
+        if (num < s) {
+            return mList[i].movieId;
+        }
+    }
+    return mList[lastIndex].movieId;
+};
+
 //Values popularity vector
 async function initVectors(u) {
   toRate = [];
   mList = await movieController.getMovieList(1);
-  //Filters result array based on a specific value
-  popularity = mList.filter((element) => element.popularity_index > 0.1);
-  //console.log(popularity);
   let demo = await movieController.getMovieList(2);
   u.preferences.forEach((p)=>{
     toRate.push(demo.find(el => el.movieId === p.user));
   })
-  //console.log(toRate);
-  //console.log(toRate);
 }
 
 //GET BY USERNAME HANDLER - returns a user by username
@@ -182,15 +191,7 @@ export const getUser = (req, res) => {
   User.findOne({ username: uname })
     .then(async (user) => {
       if (user !== null) {
-        // res.locals.user = user;
-        // res.locals.title1 = undefined;
-        // res.locals.title2 = undefined;
-        // res.locals.imdb_one = undefined;
-        // res.locals.imdb_two = undefined;
         await initVectors(user);
-        console.log(toRate);
-        //res.locals.films = toRate;
-        //console.log(popularity);
         res.render("loggedUser", { user: user , films: toRate});
       } else {
         res.render("home");
