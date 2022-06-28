@@ -7,6 +7,7 @@
     <title>
         Home
     </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script>
         function showForm() {
             document.getElementById("signin").style.display = "block";
@@ -16,16 +17,13 @@
 </head>
 
 <body>
-    <h1>
-        Raccolta preferenze film
-    </h1>
-
+    <h1>Raccolta preferenze film</h1>
     <form method="get" action="/users">
-        Accedi con il tuo username&nbsp<input type="text" id="uname" name="uname">&nbsp<input type="submit" value="Accedi">
+        Accedi con il tuo username&nbsp<input type="text" id="uname" name="uname">&nbsp<input type="submit" class="btn btn-primary" value="Accedi">
     </form>
 
     <p>
-    <input type="button" id="showForm" name="showForm" value="Registrati" onclick="showForm()">
+    <input type="button" class="btn btn-primary" id="showForm" name="showForm" value="Registrati" onclick="showForm()">
     <form id="signin" method="post" action="/users" style="display: none;">
         Nome:&nbsp<input type="text" name="name">
         Cognome:&nbsp<input type="text" name="last">
@@ -38,9 +36,13 @@
             </select>
         E-mail:&nbsp<input type="email" name="email">
         Username:&nbsp<input type="text" name="username">
-        <input type="submit" id="confirm" name="confirm" value="Invia">
+        <input type="submit" class="btn btn-primary" id="confirm" name="confirm" value="Invia">
     </form>
     </p>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
+
 </body>
 
 </html>
