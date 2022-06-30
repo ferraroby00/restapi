@@ -4,6 +4,7 @@ import * as movieController from "../controllers/movies.js";
 import Link from "../models/link.js";
 import fetch from "node-fetch";
 
+//Global variables
 let counter;
 let mList;
 let toRate;
