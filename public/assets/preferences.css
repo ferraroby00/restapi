@@ -28,3 +28,7 @@ fieldset {
   justify-content: center;
   gap: 10px;
 }
+
+.tl {
+  font-size: large;
+}

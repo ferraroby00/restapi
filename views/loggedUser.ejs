@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <h1>Gestione utente</h1>
+  <h1>Gestione utente: Benvenuto <%= user.name %> <%= user.last %></h1>
   <p>
     <input type="button" class="btn btn-primary" id="userModButton" value="Modifica dettagli account" onclick="showUserForm()" />
     <form method="post" action="/users/<%= user.username %>?_method=PUT" id="userForm" style="display: none">
