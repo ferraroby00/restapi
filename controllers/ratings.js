@@ -6,7 +6,7 @@ import Movie from "../models/movie.js";
 export const getAllRatings = (req, res) => {
   Rating.aggregate([
     { $match: { rating: { $exists: true } } },
-    { $group: { _id: "$filmId", averageRating: { $avg: "$rating" } } },
+    { $group: { _id: "$filmId" } },
     {
       $lookup: {
         from: "films",
@@ -18,14 +18,12 @@ export const getAllRatings = (req, res) => {
     {
       $project: {
         movieID: "$_id",
-        averageRating: 1,
         movieName: { $arrayElemAt: ["$join.title", 0] },
       },
     },
     {
       $project: {
         movieName: 1,
-        averageRating: 1,
       },
     },
   ])
