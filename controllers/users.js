@@ -9,6 +9,30 @@ let counter;
 let mList;
 let toRate;
 
+//custom random functions that takes into consideration the probability of each item (movie)
+function getRandom() {
+  let num = Math.random(),
+    s = 0,
+    lastIndex = mList.length - 1;
+  for (let i = 0; i < lastIndex; ++i) {
+    s += mList[i].prob_index;
+    if (num < s) {
+      return mList[i].movieId;
+    }
+  }
+  return mList[lastIndex].movieId;
+}
+
+//values popularity vector
+async function initVectors(u) {
+  toRate = [];
+  mList = await movieController.getMovieList(1);
+  let demo = await movieController.getMovieList(2);
+  u.preferences.forEach((p) => {
+    toRate.push(demo.find((el) => el.movieId === p.user));
+  });
+}
+
 //GET HANDLER - returns all users documents
 export const getAllUsers = (req, res) => {
   //if the URL contains a query string it has to be redirected to users/uname
@@ -65,7 +89,6 @@ export const createUser = (req, res) => {
 export const getPreferences = async (req, res) => {
   res.locals.imdb_one = undefined;
   res.locals.imdb_two = undefined;
-  console.log(getRandom());
   //generating random indexes for the movieIds most popular array (popularity)
   const rand1 = getRandom();
   const rand2 = getRandom();
@@ -158,29 +181,7 @@ export const postPreference = (req, res) => {
     });
 };
 
-//custom random functions that takes into consideration the probability of each item (movie)
-function getRandom() {
-  let num = Math.random(),
-    s = 0,
-    lastIndex = mList.length - 1;
-  for (let i = 0; i < lastIndex; ++i) {
-    s += mList[i].prob_index;
-    if (num < s) {
-      return mList[i].movieId;
-    }
-  }
-  return mList[lastIndex].movieId;
-}
 
-//values popularity vector
-async function initVectors(u) {
-  toRate = [];
-  mList = await movieController.getMovieList(1);
-  let demo = await movieController.getMovieList(2);
-  u.preferences.forEach((p) => {
-    toRate.push(demo.find((el) => el.movieId === p.user));
-  });
-}
 
 //GET BY USERNAME HANDLER - returns a user by username
 export const getUser = (req, res) => {

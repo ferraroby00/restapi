@@ -80,7 +80,7 @@ export const deleteMovie = (req, res) => {
 };
 
 //PATCH BY ID HANDLER - updates a movie by Id and by specific fields stored in HTTP request body
-export const updateMovie = async (req, res) => {
+export const updateMovie = (req, res) => {
   const { id } = req.params;
   const { title, genres } = req.body;
   if (title)
