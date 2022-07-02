@@ -4,34 +4,9 @@ import Movie from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
 export const getAllRatings = (req, res) => {
-  Rating.aggregate([
-    { $match: { rating: { $exists: true } } },
-    { $group: { _id: "$filmId", averageRating: { $avg: "$rating" } } },
-    {
-      $lookup: {
-        from: "films",
-        localField: "_id",
-        foreignField: "_id",
-        as: "join",
-      },
-    },
-    {
-      $project: {
-        movieID: "$_id",
-        averageRating: 1,
-        movieName: { $arrayElemAt: ["$join.title", 0] },
-      },
-    },
-    {
-      $project: {
-        movieName: 1,
-        averageRating: 1,
-      },
-    },
-  ])
-    .then(function (el) {
-      res.send(el);
-    })
+  Rating.find({}).then((r) => {
+    res.send(r);
+  })
     .catch(() => {
       res.json({ message: "Cannot get ratings" });
     });
@@ -67,7 +42,7 @@ export const insertRating = (req, res) => {
         Movie.updateOne(
           { movieId: el._id },
           { $set: { prob_index: el.count } },
-          () => {}
+          () => { }
         );
       });
     })

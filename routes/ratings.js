@@ -29,6 +29,6 @@ router.post("/", insertRating);
 router.delete("/:id", deleteRating);
 
 //update rating by Id
-router.put("/:id", updateRating);
+router.patch("/:id", updateRating);
 
 export default router;

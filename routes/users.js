@@ -37,6 +37,6 @@ router.post("/:uname/preferences", postPreference);
 router.delete("/:uname", deleteUser);
 
 //update user by Id
-router.put("/:uname", updateUser);
+router.patch("/:uname", updateUser);
 
 export default router;
