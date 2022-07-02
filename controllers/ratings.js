@@ -4,8 +4,8 @@ import Movie from "../models/movie.js";
 
 //GET HANDLER - returns all movies documents
 export const getAllRatings = (req, res) => {
-  Rating.find({}).then((r) => {
-    res.send(r);
+  Rating.find({}).then((ratings) => {
+    res.send(ratings);
   })
     .catch(() => {
       res.json({ message: "Cannot get ratings" });
