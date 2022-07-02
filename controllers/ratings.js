@@ -55,37 +55,12 @@ export const insertRating = (req, res) => {
 //GET BY ID HANDLER - returns a rating by film ID
 export const getRating = (req, res) => {
   const { id } = req.params;
-  Rating.aggregate([
-    { $match: { rating: { $exists: true } } },
-    { $group: { _id: "$filmId", averageRating: { $avg: "$rating" } } },
-    {
-      $lookup: {
-        from: "films",
-        localField: "_id",
-        foreignField: "_id",
-        as: "join",
-      },
-    },
-    {
-      $project: {
-        movieID: "$_id",
-        averageRating: 1,
-        movieName: { $arrayElemAt: ["$join.title", 0] },
-      },
-    },
-    {
-      $project: {
-        movieName: 1,
-        averageRating: 1,
-      },
-    },
-    { $match: { _id: mongoose.Types.ObjectId(id) } },
-  ])
-    .then(function (found) {
-      res.send(found);
+  Rating.findOne({ _id: id })
+    .then((rating) => {
+      res.send(rating);
     })
-    .catch((err) => {
-      res.json({ message: err });
+    .catch(() => {
+      res.json({ message: "Cannot get rating" });
     });
 };
 
